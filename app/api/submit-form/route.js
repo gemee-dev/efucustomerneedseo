@@ -82,7 +82,7 @@ export async function POST(request) {
 
 async function sendConfirmationEmail(submission) {
   try {
-    const transporter = nodemailer.createTransporter({
+    const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST || 'smtp.gmail.com',
       port: process.env.SMTP_PORT || 587,
       secure: false,
@@ -207,7 +207,7 @@ async function sendSlackNotification(data) {
   }
 }
 
-async function logToGoogleSheets(data: any): Promise<void> {
+async function logToGoogleSheets(data) {
   // Mock Google Sheets logging
   console.log("Logging to Google Sheets:", data.name)
 
@@ -234,30 +234,4 @@ async function logToGoogleSheets(data: any): Promise<void> {
   */
 }
 
-async function sendConfirmationEmail(data: any): Promise<void> {
-  // Mock confirmation email
-  console.log("Sending confirmation email to:", data.email)
 
-  // Example email implementation:
-  /*
-  const resend = new Resend(process.env.RESEND_API_KEY)
-  
-  await resend.emails.send({
-    from: 'noreply@yourdomain.com',
-    to: data.email,
-    subject: 'Project Inquiry Received',
-    html: `
-      <h2>Thank you for your project inquiry!</h2>
-      <p>Hi ${data.name},</p>
-      <p>We've received your project inquiry and will get back to you within 24 hours.</p>
-      <h3>Your submission details:</h3>
-      <ul>
-        <li><strong>Service:</strong> ${data.service}</li>
-        <li><strong>Budget:</strong> ${data.budget || 'Not specified'}</li>
-        <li><strong>Timeline:</strong> ${data.timeline || 'Not specified'}</li>
-      </ul>
-      <p>Best regards,<br>Your Company Team</p>
-    `
-  })
-  */
-}

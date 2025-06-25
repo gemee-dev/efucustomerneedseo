@@ -14,15 +14,15 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Loader2, CheckCircle } from "lucide-react"
 
 const serviceOptions = [
-  { value: "seo-audit", label: "SEO Audit & Analysis" },
-  { value: "local-seo", label: "Local SEO Optimization" },
-  { value: "technical-seo", label: "Technical SEO" },
-  { value: "content-seo", label: "Content SEO & Strategy" },
-  { value: "ecommerce-seo", label: "E-commerce SEO" },
-  { value: "seo-consulting", label: "SEO Consulting" },
-  { value: "web-development", label: "SEO-Optimized Web Development" },
-  { value: "digital-marketing", label: "Digital Marketing & SEO" },
-  { value: "other", label: "Other SEO Services" },
+  { value: "seo-technology-consulting", label: "SEO Technology Consulting" },
+  { value: "digital-marketing-events", label: "Digital Marketing Events & Workshops" },
+  { value: "seo-strategy-consulting", label: "SEO Strategy Consulting" },
+  { value: "technical-seo-consulting", label: "Technical SEO Consulting" },
+  { value: "seo-training-events", label: "SEO Training & Educational Events" },
+  { value: "technology-implementation", label: "SEO Technology Implementation" },
+  { value: "seo-audit-consulting", label: "SEO Audit & Analysis Consulting" },
+  { value: "digital-transformation", label: "Digital Transformation Consulting" },
+  { value: "custom-consulting", label: "Custom SEO Consultancy Solutions" },
 ]
 
 const budgetRanges = [
@@ -188,7 +188,7 @@ export function SmartForm({ email, onSubmit }) {
     <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
       <div className="text-center mb-6">
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Tell Us About Your SEO Needs</h2>
-        <p className="text-gray-600">We'll use this information to provide you with the best SEO strategy and services</p>
+        <p className="text-gray-600">Share your requirements for our technology-based SEO consultancy, events, or strategic guidance</p>
       </div>
 
       {error && (

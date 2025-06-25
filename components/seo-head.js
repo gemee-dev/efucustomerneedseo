@@ -4,24 +4,48 @@ import Head from "next/head"
 
 export function SEOHead() {
   const siteUrl = "https://customerneedseo.com"
-  const title = "Customer Need SEO - Professional SEO & Digital Services"
+  const title = "Customer Need SEO - Technology-Based SEO Events & Consultancy Solutions"
   const description =
-    "Streamline your SEO and digital marketing needs with Customer Need SEO. Get detailed project requirements for SEO services, web development, design, marketing, and digital consulting. Fast, secure, and efficient."
+    "Technology-driven SEO events and consultancy services by Customer Need SEO. Expert SEO consulting, digital marketing events, strategic technology solutions, and advanced search optimization guidance for businesses seeking cutting-edge SEO expertise."
   const image = `${siteUrl}/og-image.jpg`
 
   const structuredData = {
     "@context": "https://schema.org",
-    "@type": "WebApplication",
-    name: title,
+    "@type": "ProfessionalService",
+    name: "Customer Need SEO",
     description: description,
     url: siteUrl,
-    applicationCategory: "BusinessApplication",
-    operatingSystem: "Web",
-    offers: {
-      "@type": "Offer",
-      category: "Professional Services",
-      availability: "https://schema.org/InStock",
-      priceRange: "$$"
+    serviceType: "Technology-Based SEO Consultancy & Events",
+    areaServed: "Worldwide",
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Technology-Based SEO Services",
+      itemListElement: [
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "SEO Technology Consulting",
+            description: "Advanced technology-driven SEO consulting and strategy development"
+          }
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Digital Marketing Events",
+            description: "SEO workshops, seminars, and digital marketing events"
+          }
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Technical SEO Solutions",
+            description: "Technology-based technical SEO implementation and optimization"
+          }
+        }
+      ]
     },
     aggregateRating: {
       "@type": "AggregateRating",
@@ -31,7 +55,11 @@ export function SEOHead() {
     provider: {
       "@type": "Organization",
       name: "Customer Need SEO",
-      url: siteUrl
+      url: siteUrl,
+      sameAs: [
+        "https://www.linkedin.com/company/customer-need-seo",
+        "https://twitter.com/customerneedseo"
+      ]
     }
   }
 
@@ -40,7 +68,7 @@ export function SEOHead() {
       {/* Basic Meta Tags */}
       <title>{title}</title>
       <meta name="description" content={description} />
-      <meta name="keywords" content="SEO services, search engine optimization, digital marketing, web development, SEO consulting, customer needs analysis, SEO audit, keyword research, local SEO, technical SEO" />
+      <meta name="keywords" content="Customer Need SEO, technology-based SEO, SEO events, SEO consultancy, digital marketing consulting, SEO technology solutions, search optimization events, SEO strategy consulting, technical SEO services, SEO workshops, digital marketing events" />
       <meta name="author" content="Customer Need SEO" />
       <meta name="robots" content="index, follow" />
       <meta name="language" content="English" />

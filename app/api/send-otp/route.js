@@ -1,14 +1,10 @@
 import { NextResponse } from "next/server"
 import { OTP } from "@/lib/models/OTP"
 import { User } from "@/lib/models/User"
-import { initializeDatabase } from "@/lib/db"
 import nodemailer from "nodemailer"
 
 // Rate limiting storage (in production, use Redis)
 const rateLimitStorage = new Map()
-
-// Initialize database on first load
-initializeDatabase().catch(console.error)
 
 // Rate limiting configuration
 const RATE_LIMIT_WINDOW = 60 * 1000 // 1 minute
@@ -39,7 +35,7 @@ function isRateLimited(email) {
 async function sendEmailOTP(email, otp) {
   try {
     // Configure email transporter
-    const transporter = nodemailer.createTransporter({
+    const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST || 'smtp.gmail.com',
       port: process.env.SMTP_PORT || 587,
       secure: false,
