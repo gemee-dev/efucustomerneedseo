@@ -8,7 +8,9 @@
     "lint": "next lint",
     "start": "next start",
     "db:init": "node scripts/init-db.js",
-    "db:reset": "node scripts/init-db.js"
+    "db:reset": "node scripts/init-db.js",
+    "fix:chunks": "node scripts/fix-chunk-errors.js",
+    "fix:chunks:full": "node scripts/fix-chunk-errors.js --reinstall"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
