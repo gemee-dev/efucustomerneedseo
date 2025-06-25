@@ -6,7 +6,9 @@
     "build": "next build",
     "dev": "next dev",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "db:init": "node scripts/init-db.js",
+    "db:reset": "node scripts/init-db.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
@@ -41,14 +43,16 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "1.0.4",
-    "date-fns": "4.1.0",
+    "date-fns": "^3.6.0",
     "embla-carousel-react": "8.5.1",
     "fs": "latest",
     "input-otp": "1.4.1",
     "lucide-react": "^0.454.0",
     "next": "14.2.16",
     "next-themes": "^0.4.4",
+    "nodemailer": "^6.10.1",
     "path": "latest",
+    "pg": "^8.16.2",
     "react": "^18",
     "react-day-picker": "8.10.1",
     "react-dom": "^18",
@@ -63,11 +67,7 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@types/node": "^22",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
     "postcss": "^8.5",
-    "tailwindcss": "^3.4.17",
-    "typescript": "^5"
+    "tailwindcss": "^3.4.17"
   }
 }
