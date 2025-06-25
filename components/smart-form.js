@@ -14,19 +14,23 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Loader2, CheckCircle } from "lucide-react"
 
 const serviceOptions = [
-  { value: "web-development", label: "Web Development" },
-  { value: "mobile-app", label: "Mobile App Development" },
-  { value: "ui-ux-design", label: "UI/UX Design" },
-  { value: "digital-marketing", label: "Digital Marketing" },
-  { value: "consulting", label: "Business Consulting" },
-  { value: "other", label: "Other" },
+  { value: "seo-audit", label: "SEO Audit & Analysis" },
+  { value: "local-seo", label: "Local SEO Optimization" },
+  { value: "technical-seo", label: "Technical SEO" },
+  { value: "content-seo", label: "Content SEO & Strategy" },
+  { value: "ecommerce-seo", label: "E-commerce SEO" },
+  { value: "seo-consulting", label: "SEO Consulting" },
+  { value: "web-development", label: "SEO-Optimized Web Development" },
+  { value: "digital-marketing", label: "Digital Marketing & SEO" },
+  { value: "other", label: "Other SEO Services" },
 ]
 
 const budgetRanges = [
+  { value: "500-1k", label: "$500 - $1,000" },
+  { value: "1k-3k", label: "$1,000 - $3,000" },
+  { value: "3k-5k", label: "$3,000 - $5,000" },
   { value: "5k-10k", label: "$5,000 - $10,000" },
-  { value: "10k-25k", label: "$10,000 - $25,000" },
-  { value: "25k-50k", label: "$25,000 - $50,000" },
-  { value: "50k+", label: "$50,000+" },
+  { value: "10k+", label: "$10,000+" },
 ]
 
 const timelineOptions = [
@@ -183,8 +187,8 @@ export function SmartForm({ email, onSubmit }) {
   return (
     <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Tell Us About Your Project</h2>
-        <p className="text-gray-600">We'll use this information to provide you with the best service</p>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">Tell Us About Your SEO Needs</h2>
+        <p className="text-gray-600">We'll use this information to provide you with the best SEO strategy and services</p>
       </div>
 
       {error && (

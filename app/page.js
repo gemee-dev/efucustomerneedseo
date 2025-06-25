@@ -74,11 +74,11 @@ export default function HomePage() {
                 <Sparkles className="w-4 h-4" />
               </div>
               <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent mb-4 leading-tight">
-                Professional Form System
+                Customer Need SEO
               </h1>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-                Streamline your client onboarding with our professional form system.
-                <span className="text-blue-600 font-semibold"> Multiple forms, unlimited possibilities.</span>
+                Streamline your SEO and digital marketing needs with our professional service platform.
+                <span className="text-blue-600 font-semibold"> Multiple services, unlimited growth potential.</span>
               </p>
 
               {/* Stats */}
@@ -128,8 +128,8 @@ export default function HomePage() {
               <div className="lg:col-span-3">
                 <Card className="bg-white/80 backdrop-blur-sm shadow-2xl border-0 overflow-hidden">
                   <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6">
-                    <h2 className="text-2xl font-bold text-white mb-2">Form Management Dashboard</h2>
-                    <p className="text-blue-100">Create, manage, and track your forms with ease</p>
+                    <h2 className="text-2xl font-bold text-white mb-2">SEO Service Dashboard</h2>
+                    <p className="text-blue-100">Submit your SEO and digital marketing requirements with ease</p>
                   </div>
 
                   <CardContent className="p-8">
@@ -140,7 +140,7 @@ export default function HomePage() {
                           <Button className="h-16 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl transition-all duration-300 group">
                             <div className="flex flex-col items-center gap-1">
                               <Plus className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                              <span className="font-semibold">Start New Form</span>
+                              <span className="font-semibold">Start New Project</span>
                             </div>
                           </Button>
                         </DialogTrigger>
@@ -155,7 +155,7 @@ export default function HomePage() {
                             <Button className="h-16 bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 text-white shadow-lg hover:shadow-xl transition-all duration-300 group">
                               <div className="flex flex-col items-center gap-1">
                                 <FileText className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                                <span className="font-semibold">Open Form</span>
+                                <span className="font-semibold">Open Project</span>
                               </div>
                             </Button>
                           </DialogTrigger>
@@ -245,10 +245,10 @@ export default function HomePage() {
                           <Mail className="w-16 h-16 text-blue-600 mx-auto relative z-10" />
                         </div>
                         <div>
-                          <h3 className="text-3xl font-bold text-gray-900 mb-3">Welcome to Professional Forms</h3>
+                          <h3 className="text-3xl font-bold text-gray-900 mb-3">Welcome to Customer Need SEO</h3>
                           <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-                            Transform your client onboarding experience with our professional form system.
-                            <span className="text-blue-600 font-semibold"> Start multiple forms, track progress, and streamline your workflow.</span>
+                            Transform your digital presence with our comprehensive SEO and digital marketing services.
+                            <span className="text-blue-600 font-semibold"> Start multiple projects, track progress, and grow your online visibility.</span>
                           </p>
                         </div>
 
@@ -257,17 +257,17 @@ export default function HomePage() {
                           <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-sm">
                             <Zap className="w-8 h-8 text-yellow-500 mb-2" />
                             <h4 className="font-semibold text-gray-900">Lightning Fast</h4>
-                            <p className="text-sm text-gray-600 text-center">Complete forms in under 5 minutes</p>
+                            <p className="text-sm text-gray-600 text-center">Get SEO analysis in under 5 minutes</p>
                           </div>
                           <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-sm">
                             <Users className="w-8 h-8 text-green-500 mb-2" />
-                            <h4 className="font-semibold text-gray-900">Multi-User</h4>
-                            <p className="text-sm text-gray-600 text-center">Collaborate with team members</p>
+                            <h4 className="font-semibold text-gray-900">SEO Experts</h4>
+                            <p className="text-sm text-gray-600 text-center">Work with certified SEO professionals</p>
                           </div>
                           <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-sm">
                             <Star className="w-8 h-8 text-purple-500 mb-2" />
-                            <h4 className="font-semibold text-gray-900">Advanced Features</h4>
-                            <p className="text-sm text-gray-600 text-center">Professional form optimization</p>
+                            <h4 className="font-semibold text-gray-900">Advanced SEO</h4>
+                            <p className="text-sm text-gray-600 text-center">Comprehensive SEO optimization</p>
                           </div>
                         </div>
 

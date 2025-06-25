@@ -2,13 +2,13 @@
 
 /**
  * Database Initialization Script
- * Run this script to set up the PostgreSQL database for Professional Forms
+ * Run this script to set up the PostgreSQL database for Customer Need SEO
  */
 
 import { initializeDatabase } from '../lib/db.js'
 
 async function main() {
-  console.log('🚀 Initializing Professional Forms database...')
+  console.log('🚀 Initializing Customer Need SEO database...')
   
   try {
     await initializeDatabase()

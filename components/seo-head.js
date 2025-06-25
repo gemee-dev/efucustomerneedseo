@@ -3,10 +3,10 @@
 import Head from "next/head"
 
 export function SEOHead() {
-  const siteUrl = "https://smartforms.com"
-  const title = "Smart Forms - Professional Project Intake System"
+  const siteUrl = "https://customerneedseo.com"
+  const title = "Customer Need SEO - Professional SEO & Digital Services"
   const description =
-    "Streamline your client onboarding with our professional intake form system. Get detailed project requirements for web development, design, marketing, and consulting services. Fast, secure, and efficient."
+    "Streamline your SEO and digital marketing needs with Customer Need SEO. Get detailed project requirements for SEO services, web development, design, marketing, and digital consulting. Fast, secure, and efficient."
   const image = `${siteUrl}/og-image.jpg`
 
   const structuredData = {
@@ -30,7 +30,7 @@ export function SEOHead() {
     },
     provider: {
       "@type": "Organization",
-      name: "Smart Forms",
+      name: "Customer Need SEO",
       url: siteUrl
     }
   }
@@ -40,8 +40,8 @@ export function SEOHead() {
       {/* Basic Meta Tags */}
       <title>{title}</title>
       <meta name="description" content={description} />
-      <meta name="keywords" content="project intake form, client onboarding, web development quotes, design services, marketing consultation, business forms, professional services, project management" />
-      <meta name="author" content="Smart Forms" />
+      <meta name="keywords" content="SEO services, search engine optimization, digital marketing, web development, SEO consulting, customer needs analysis, SEO audit, keyword research, local SEO, technical SEO" />
+      <meta name="author" content="Customer Need SEO" />
       <meta name="robots" content="index, follow" />
       <meta name="language" content="English" />
       <meta name="revisit-after" content="7 days" />
@@ -53,7 +53,7 @@ export function SEOHead() {
       <meta property="og:description" content={description} />
       <meta property="og:image" content={image} />
       <meta property="og:url" content={siteUrl} />
-      <meta property="og:site_name" content="Smart Forms" />
+      <meta property="og:site_name" content="Customer Need SEO" />
       <meta property="og:locale" content="en_US" />
 
       {/* Twitter Card */}

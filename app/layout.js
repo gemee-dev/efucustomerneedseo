@@ -6,30 +6,30 @@ import { AuthProvider } from "@/hooks/use-auth"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-  title: "Professional Forms - Get Your Project Started",
+  title: "Customer Need SEO - Get Your Project Started",
   description:
-    "Submit your project requirements through our professional intake form system. Get personalized quotes for web development, design, marketing, and consulting services.",
-  keywords: "web development, design, marketing, consulting, project intake, quote request, professional forms, client onboarding",
-  authors: [{ name: "Professional Forms" }],
+    "Submit your project requirements through Customer Need SEO intake form system. Get personalized quotes for SEO services, web development, design, marketing, and digital consulting.",
+  keywords: "SEO services, search engine optimization, web development, digital marketing, SEO consulting, project intake, quote request, customer needs, SEO analysis",
+  authors: [{ name: "Customer Need SEO" }],
   openGraph: {
-    title: "Professional Forms - Get Your Project Started",
-    description: "Submit your project requirements through our professional intake form system.",
+    title: "Customer Need SEO - Get Your Project Started",
+    description: "Submit your project requirements through Customer Need SEO intake form system.",
     type: "website",
-    url: "https://professionalforms.com",
+    url: "https://customerneedseo.com",
     images: [
       {
-        url: "https://professionalforms.com/og-image.jpg",
+        url: "https://customerneedseo.com/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Professional Forms System",
+        alt: "Customer Need SEO System",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Professional Forms - Get Your Project Started",
-    description: "Submit your project requirements through our professional intake form system.",
-    images: ["https://professionalforms.com/og-image.jpg"],
+    title: "Customer Need SEO - Get Your Project Started",
+    description: "Submit your project requirements through Customer Need SEO intake form system.",
+    images: ["https://customerneedseo.com/og-image.jpg"],
   },
   robots: {
     index: true,

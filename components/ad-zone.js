@@ -39,27 +39,27 @@ export function AdZone({ position }) {
       case "sidebar":
         const sidebarAds = [
           {
-            title: "Web Development",
-            description: "Professional websites that convert visitors into customers",
-            price: "Starting at $2,999",
+            title: "SEO Audit",
+            description: "Comprehensive SEO analysis to boost your rankings",
+            price: "Starting at $299",
             rating: "4.9",
             reviews: "150+",
             icon: Globe,
             color: "from-blue-500 to-cyan-500"
           },
           {
-            title: "Mobile Apps",
-            description: "Native iOS & Android apps for your business",
-            price: "Starting at $4,999",
+            title: "Local SEO",
+            description: "Dominate local search results in your area",
+            price: "Starting at $599/mo",
             rating: "4.8",
             reviews: "89+",
             icon: Phone,
             color: "from-purple-500 to-pink-500"
           },
           {
-            title: "Digital Marketing",
-            description: "Grow your business with targeted marketing campaigns",
-            price: "Starting at $1,499/mo",
+            title: "Content SEO",
+            description: "SEO-optimized content that ranks and converts",
+            price: "Starting at $799/mo",
             rating: "4.9",
             reviews: "200+",
             icon: Mail,

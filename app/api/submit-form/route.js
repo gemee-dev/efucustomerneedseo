@@ -93,9 +93,9 @@ async function sendConfirmationEmail(submission) {
     })
 
     const mailOptions = {
-      from: process.env.FROM_EMAIL || 'noreply@smartforms.com',
+      from: process.env.FROM_EMAIL || 'noreply@customerneedseo.com',
       to: submission.email,
-      subject: 'Form Submission Received - Smart Forms',
+      subject: 'SEO Project Submission Received - Customer Need SEO',
       html: `
         <!DOCTYPE html>
         <html>
@@ -106,14 +106,14 @@ async function sendConfirmationEmail(submission) {
         </head>
         <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
-            <h1 style="color: white; margin: 0; font-size: 28px;">Smart Forms</h1>
-            <p style="color: #e0e7ff; margin: 10px 0 0 0;">Form Submission Received</p>
+            <h1 style="color: white; margin: 0; font-size: 28px;">Customer Need SEO</h1>
+            <p style="color: #e0e7ff; margin: 10px 0 0 0;">SEO Project Submission Received</p>
           </div>
 
           <div style="background: white; padding: 40px; border-radius: 0 0 10px 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
             <h2 style="color: #333; margin-bottom: 20px;">Thank you, ${submission.name}!</h2>
 
-            <p style="margin: 20px 0; color: #666;">We've received your form submission and will get back to you within 24 hours.</p>
+            <p style="margin: 20px 0; color: #666;">We've received your SEO project submission and will get back to you within 24 hours with a detailed analysis and proposal.</p>
 
             <div style="background: #f8fafc; border-left: 4px solid #4f46e5; padding: 20px; margin: 30px 0;">
               <h3 style="margin: 0 0 15px 0; color: #333;">Submission Details:</h3>
@@ -130,13 +130,13 @@ async function sendConfirmationEmail(submission) {
 
             <p style="color: #9ca3af; font-size: 14px; margin: 0;">
               Best regards,<br>
-              The Smart Forms Team
+              The Customer Need SEO Team
             </p>
           </div>
         </body>
         </html>
       `,
-      text: `Thank you, ${submission.name}!\n\nWe've received your form submission for ${submission.service} and will get back to you within 24 hours.\n\nSubmission ID: #${submission.id}\n\nBest regards,\nThe Smart Forms Team`
+      text: `Thank you, ${submission.name}!\n\nWe've received your SEO project submission for ${submission.service} and will get back to you within 24 hours with a detailed analysis.\n\nSubmission ID: #${submission.id}\n\nBest regards,\nThe Customer Need SEO Team`
     }
 
     if (process.env.SMTP_USER && process.env.SMTP_PASS) {

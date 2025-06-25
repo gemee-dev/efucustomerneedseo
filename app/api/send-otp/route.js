@@ -51,9 +51,9 @@ async function sendEmailOTP(email, otp) {
 
     // Email template
     const mailOptions = {
-      from: process.env.FROM_EMAIL || 'noreply@smartforms.com',
+      from: process.env.FROM_EMAIL || 'noreply@customerneedseo.com',
       to: email,
-      subject: 'Your Verification Code - Smart Forms',
+      subject: 'Your Verification Code - Customer Need SEO',
       html: `
         <!DOCTYPE html>
         <html>
@@ -64,7 +64,7 @@ async function sendEmailOTP(email, otp) {
         </head>
         <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
-            <h1 style="color: white; margin: 0; font-size: 28px;">Smart Forms</h1>
+            <h1 style="color: white; margin: 0; font-size: 28px;">Customer Need SEO</h1>
             <p style="color: #e0e7ff; margin: 10px 0 0 0;">Verification Code</p>
           </div>
 
@@ -82,13 +82,13 @@ async function sendEmailOTP(email, otp) {
             <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 30px 0;">
 
             <p style="color: #9ca3af; font-size: 14px; margin: 0;">
-              This email was sent from Smart Forms. Please do not reply to this email.
+              This email was sent from Customer Need SEO. Please do not reply to this email.
             </p>
           </div>
         </body>
         </html>
       `,
-      text: `Your Smart Forms verification code is: ${otp}\n\nThis code will expire in 10 minutes.\n\nIf you didn't request this code, please ignore this email.`
+      text: `Your Customer Need SEO verification code is: ${otp}\n\nThis code will expire in 10 minutes.\n\nIf you didn't request this code, please ignore this email.`
     }
 
     // Send email
