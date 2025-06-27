@@ -6,30 +6,30 @@ import { AuthProvider } from "@/hooks/use-auth"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-  title: "Customer Need SEO - Technology-Based SEO Events & Consultancy Services",
+  title: "Efuyegela - Creative Ecosystem & Software Development | Publishers, Consultants, Intelligence & Events",
   description:
-    "Technology-driven SEO events and consultancy services by Customer Need SEO. Expert SEO consulting, digital marketing events, technology solutions, and strategic SEO guidance for businesses seeking advanced search optimization.",
-  keywords: "Customer Need SEO, technology-based SEO, SEO events, SEO consultancy, digital marketing consulting, SEO technology solutions, search optimization events, SEO strategy consulting, technical SEO services",
-  authors: [{ name: "Customer Need SEO" }],
+    "Efuyegela connects creators and provides comprehensive solutions through our six divisions plus software development: Publishers, Consultants, Collectives, Intelligence, Events, Content, and custom software solutions. We help creatives shape ideas, raise funds, find markets, and create value through technology.",
+  keywords: "Efuyegela, creative ecosystem, software development, web development, mobile apps, publishers, consultants, intelligence, events, content, collectives, creative solutions, ecosystem mapping, product development, service delivery",
+  authors: [{ name: "Efuyegela" }],
   openGraph: {
-    title: "Customer Need SEO - Technology-Based SEO Events & Consultancy",
-    description: "Technology-driven SEO events and consultancy services. Expert SEO consulting, digital marketing events, and strategic technology solutions for advanced search optimization.",
+    title: "Efuyegela - Creative Ecosystem & Software Development",
+    description: "Efuyegela connects creators and provides comprehensive solutions through Publishers, Consultants, Collectives, Intelligence, Events, Content divisions plus custom software development.",
     type: "website",
-    url: "https://customerneedseo.com",
+    url: "https://efuyegela.com",
     images: [
       {
-        url: "https://customerneedseo.com/og-image.jpg",
+        url: "https://efuyegela.com/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Customer Need SEO - Professional SEO Services",
+        alt: "Efuyegela - Creative Ecosystem & Software Development",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Customer Need SEO - Technology-Based SEO Events & Consultancy",
-    description: "Technology-driven SEO events and consultancy services. Expert SEO consulting and strategic technology solutions for businesses.",
-    images: ["https://customerneedseo.com/og-image.jpg"],
+    title: "Efuyegela - Creative Ecosystem & Software Development",
+    description: "Efuyegela connects creators and provides comprehensive solutions through our six divisions plus software development: Publishers, Consultants, Intelligence, Events, and more.",
+    images: ["https://efuyegela.com/twitter-image.jpg"],
   },
   robots: {
     index: true,

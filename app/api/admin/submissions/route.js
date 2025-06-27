@@ -6,8 +6,17 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-producti
 
 function verifyAdminToken(request) {
   try {
-    const token = request.cookies.get('admin-token')?.value
-    
+    // Try to get token from cookie first (for web dashboard)
+    let token = request.cookies.get('admin-token')?.value
+
+    // If no cookie token, try Authorization header (for API access)
+    if (!token) {
+      const authHeader = request.headers.get('authorization')
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        token = authHeader.substring(7)
+      }
+    }
+
     if (!token) {
       return null
     }

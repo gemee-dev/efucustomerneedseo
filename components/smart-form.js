@@ -14,15 +14,20 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Loader2, CheckCircle } from "lucide-react"
 
 const serviceOptions = [
-  { value: "seo-technology-consulting", label: "SEO Technology Consulting" },
-  { value: "digital-marketing-events", label: "Digital Marketing Events & Workshops" },
-  { value: "seo-strategy-consulting", label: "SEO Strategy Consulting" },
-  { value: "technical-seo-consulting", label: "Technical SEO Consulting" },
-  { value: "seo-training-events", label: "SEO Training & Educational Events" },
-  { value: "technology-implementation", label: "SEO Technology Implementation" },
-  { value: "seo-audit-consulting", label: "SEO Audit & Analysis Consulting" },
-  { value: "digital-transformation", label: "Digital Transformation Consulting" },
-  { value: "custom-consulting", label: "Custom SEO Consultancy Solutions" },
+  { value: "efuyegela-publishers", label: "Efuyegela Publishers - Creative Publishing & Content Creation" },
+  { value: "efuyegela-consultants", label: "Efuyegela Consultants - Turn-key Solution Provider" },
+  { value: "efuyegela-collectives", label: "Efuyegela Collectives - Diverse Community Ecosystem" },
+  { value: "efuyegela-intelligence", label: "Efuyegela Intelligence - Ecosystem Mapping & Research" },
+  { value: "efuyegela-events", label: "Efuyegela Events - Product/Service Launch & Marketing" },
+  { value: "efuyegela-content", label: "Efuyegela Content - Off-the-shelf Frameworks & Products" },
+  { value: "software-development", label: "Software Development - Custom Applications & Solutions" },
+  { value: "web-development", label: "Web Development - Websites & Web Applications" },
+  { value: "mobile-development", label: "Mobile Development - iOS & Android Apps" },
+  { value: "enterprise-software", label: "Enterprise Software - Business Management Systems" },
+  { value: "creative-software", label: "Creative Software - Tools for Creators & Artists" },
+  { value: "creative-funding", label: "Creative Funding & Investment Support" },
+  { value: "market-development", label: "Market Development & Creator Support" },
+  { value: "custom-creative-solutions", label: "Custom Creative Solutions" },
 ]
 
 const budgetRanges = [
@@ -102,13 +107,14 @@ export function SmartForm({ email, onSubmit }) {
 
   const renderDynamicFields = () => {
     switch (selectedService) {
+      case "software-development":
       case "web-development":
         return (
           <div className="space-y-4">
             <div>
               <Label>Tech Stack Preferences</Label>
               <div className="grid grid-cols-2 gap-2 mt-2">
-                {["React", "Next.js", "Vue.js", "Angular", "Node.js", "Python"].map((tech) => (
+                {["React", "Next.js", "Vue.js", "Angular", "Node.js", "Python", "JavaScript", "TypeScript"].map((tech) => (
                   <div key={tech} className="flex items-center space-x-2">
                     <Checkbox
                       id={tech}
@@ -130,6 +136,108 @@ export function SmartForm({ email, onSubmit }) {
                   </div>
                 ))}
               </div>
+            </div>
+            <div>
+              <Label htmlFor="projectType">Project Type</Label>
+              <Select onValueChange={(value) => setValue("projectType", value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select project type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="web-app">Web Application</SelectItem>
+                  <SelectItem value="website">Website</SelectItem>
+                  <SelectItem value="api">API Development</SelectItem>
+                  <SelectItem value="database">Database Design</SelectItem>
+                  <SelectItem value="full-stack">Full Stack Solution</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        )
+
+      case "mobile-development":
+        return (
+          <div className="space-y-4">
+            <div>
+              <Label>Platform Preferences</Label>
+              <div className="grid grid-cols-2 gap-2 mt-2">
+                {["iOS", "Android", "React Native", "Flutter", "Xamarin", "Progressive Web App"].map((platform) => (
+                  <div key={platform} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={platform}
+                      onCheckedChange={(checked) => {
+                        const current = watch("platforms") || []
+                        if (checked) {
+                          setValue("platforms", [...current, platform])
+                        } else {
+                          setValue(
+                            "platforms",
+                            current.filter((p) => p !== platform),
+                          )
+                        }
+                      }}
+                    />
+                    <Label htmlFor={platform} className="text-sm">
+                      {platform}
+                    </Label>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )
+
+      case "enterprise-software":
+        return (
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="businessType">Business Type</Label>
+              <Select onValueChange={(value) => setValue("businessType", value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select business type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="retail">Retail</SelectItem>
+                  <SelectItem value="manufacturing">Manufacturing</SelectItem>
+                  <SelectItem value="healthcare">Healthcare</SelectItem>
+                  <SelectItem value="education">Education</SelectItem>
+                  <SelectItem value="finance">Finance</SelectItem>
+                  <SelectItem value="creative">Creative Industry</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label htmlFor="systemRequirements">System Requirements</Label>
+              <Textarea
+                id="systemRequirements"
+                {...register("systemRequirements")}
+                placeholder="Describe your business processes, user requirements, integration needs..."
+                className="mt-1"
+              />
+            </div>
+          </div>
+        )
+
+      case "creative-software":
+        return (
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="creativeField">Creative Field</Label>
+              <Select onValueChange={(value) => setValue("creativeField", value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select creative field" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="graphic-design">Graphic Design</SelectItem>
+                  <SelectItem value="video-editing">Video Editing</SelectItem>
+                  <SelectItem value="music-production">Music Production</SelectItem>
+                  <SelectItem value="writing">Writing & Publishing</SelectItem>
+                  <SelectItem value="photography">Photography</SelectItem>
+                  <SelectItem value="3d-modeling">3D Modeling</SelectItem>
+                  <SelectItem value="game-development">Game Development</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
         )
@@ -187,8 +295,8 @@ export function SmartForm({ email, onSubmit }) {
   return (
     <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Tell Us About Your SEO Needs</h2>
-        <p className="text-gray-600">Share your requirements for our technology-based SEO consultancy, events, or strategic guidance</p>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">Tell Us About Your Creative & Software Needs</h2>
+        <p className="text-gray-600">Share your requirements for our creative ecosystem solutions, software development, publishing, consulting, or events</p>
       </div>
 
       {error && (

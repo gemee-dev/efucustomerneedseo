@@ -38,7 +38,7 @@ export async function POST(request) {
       { expiresIn: '24h' }
     )
 
-    // Set HTTP-only cookie
+    // Set HTTP-only cookie and return token for API access
     const response = NextResponse.json({
       success: true,
       admin: {
@@ -46,7 +46,8 @@ export async function POST(request) {
         email: admin.email,
         name: admin.name,
         role: admin.role
-      }
+      },
+      token: token // Include token for API access
     })
 
     response.cookies.set('admin-token', token, {
