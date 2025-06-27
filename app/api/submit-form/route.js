@@ -25,6 +25,30 @@ export async function POST(request) {
       }, { status: 400 })
     }
 
+    // Service validation
+    const validServices = [
+      'efuyegela-publishers',
+      'efuyegela-consultants',
+      'efuyegela-collectives',
+      'efuyegela-intelligence',
+      'efuyegela-events',
+      'efuyegela-content',
+      'software-development',
+      'web-development',
+      'mobile-development',
+      'enterprise-software',
+      'creative-software',
+      'creative-funding',
+      'market-development',
+      'custom-creative-solutions'
+    ]
+
+    if (!validServices.includes(formData.service)) {
+      return NextResponse.json({
+        error: "Invalid service type selected"
+      }, { status: 400 })
+    }
+
     // Get or create user
     const user = await User.getOrCreate({
       email: formData.email,

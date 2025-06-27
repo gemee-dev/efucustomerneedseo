@@ -46,11 +46,12 @@ const timelineOptions = [
   { value: "6-months+", label: "6+ months" },
 ]
 
-export function SmartForm({ email, onSubmit }) {
+export function SmartForm({ email, onSubmit, onClose }) {
   const [selectedService, setSelectedService] = useState("")
   const [uploadedFiles, setUploadedFiles] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const [success, setSuccess] = useState(false)
 
   const {
     register,
@@ -85,9 +86,7 @@ export function SmartForm({ email, onSubmit }) {
   const onFormSubmit = async (data) => {
     setLoading(true)
     setError("")
-
-    // Simulate form submission delay
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+    setSuccess(false)
 
     try {
       const formData = {
@@ -96,10 +95,40 @@ export function SmartForm({ email, onSubmit }) {
         submittedAt: new Date().toISOString(),
       }
 
-      console.log("Form submitted:", formData)
-      onSubmit(formData)
+      console.log("Submitting form data:", formData)
+
+      // Make API call to submit form
+      const response = await fetch('/api/submit-form', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        setSuccess(true)
+        console.log("Form submitted successfully:", result)
+
+        // Call onSubmit callback if provided
+        if (onSubmit) {
+          onSubmit(formData)
+        }
+
+        // Auto-close after 2 seconds
+        setTimeout(() => {
+          if (onClose) {
+            onClose()
+          }
+        }, 2000)
+      } else {
+        setError(result.error || "Failed to submit form. Please try again.")
+      }
     } catch (err) {
-      setError("Failed to submit form. Please try again.")
+      console.error("Form submission error:", err)
+      setError("Failed to submit form. Please check your connection and try again.")
     } finally {
       setLoading(false)
     }
@@ -314,8 +343,33 @@ export function SmartForm({ email, onSubmit }) {
         </div>
 
         <div>
+          <Label htmlFor="email">Email Address *</Label>
+          <Input
+            id="email"
+            type="email"
+            {...register("email", {
+              required: "Email is required",
+              pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: "Please enter a valid email address"
+              }
+            })}
+            className="mt-1"
+            placeholder="your.email@example.com"
+          />
+          {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
           <Label htmlFor="company">Company</Label>
           <Input id="company" {...register("company")} className="mt-1" />
+        </div>
+
+        <div>
+          <Label htmlFor="website">Website</Label>
+          <Input id="website" type="url" {...register("website")} className="mt-1" placeholder="https://yourwebsite.com" />
         </div>
       </div>
 
@@ -411,12 +465,36 @@ export function SmartForm({ email, onSubmit }) {
         </div>
       )}
 
+      {/* Success Message */}
+      {success && (
+        <Alert className="border-green-200 bg-green-50">
+          <CheckCircle className="h-4 w-4 text-green-600" />
+          <AlertDescription className="text-green-800">
+            Your project request has been submitted successfully! We'll get back to you soon.
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {/* Error Message */}
+      {error && (
+        <Alert className="border-red-200 bg-red-50">
+          <AlertDescription className="text-red-800">
+            {error}
+          </AlertDescription>
+        </Alert>
+      )}
+
       {/* Submit Button */}
-      <Button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+      <Button type="submit" disabled={loading || success} className="w-full bg-blue-600 hover:bg-blue-700 text-white">
         {loading ? (
           <>
             <Loader2 className="w-4 h-4 mr-2 animate-spin" />
             Submitting...
+          </>
+        ) : success ? (
+          <>
+            <CheckCircle className="w-4 h-4 mr-2" />
+            Submitted Successfully!
           </>
         ) : (
           <>
