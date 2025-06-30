@@ -1,180 +1,1013 @@
 "use client"
 
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
-import { EmailVerification } from "@/components/email-verification"
-import { SmartForm } from "@/components/smart-form"
-import { BrandingProvider } from "@/components/branding-provider"
-import { Mail, FileText, Plus, Sparkles, Users, Clock, Star } from "lucide-react"
+import { AdZone } from "@/components/ad-zone"
 
 export default function HomePage() {
-  const [emailDialogOpen, setEmailDialogOpen] = useState(false)
-  const [formDialogOpen, setFormDialogOpen] = useState(false)
+  const [showForm, setShowForm] = useState(false)
+  const [formData, setFormData] = useState({
+    name: "", email: "", service: "", description: "", company: "", phone: "", budget: "", timeline: "",
+    // Web Development
+    frontendFramework: "", backendLanguage: "", backendFramework: "", database: "", webFeatures: "", hosting: "",
+    // Mobile Development
+    mobileStack: "", targetPlatforms: "", appType: "", mobileFeatures: "", backendIntegration: "", appStoreDeployment: "",
+    // Software Development
+    softwareType: "", programmingLanguage: "", targetPlatform: "", softwareFeatures: "", integrationNeeds: "", performanceRequirements: "",
+    // Publishers
+    contentType: "", contentGenre: "", contentLength: "", distributionChannels: "",
+    // Consultants
+    consultingArea: "", businessStage: "", teamSize: "", currentChallenges: "", projectScope: "", successMetrics: "",
+    // Events
+    eventType: "", eventFormat: "", attendeeCount: "", eventDuration: "", eventGoals: "", specialRequirements: "",
+    // Enterprise Software
+    companySize: "", currentSystems: "", securityRequirements: "", scalabilityNeeds: "",
+    // Legacy fields (keeping for compatibility)
+    techStack: "", platform: "", designStyle: "", targetAudience: "", features: ""
+  })
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState(false)
+  const [uploadedFiles, setUploadedFiles] = useState([])
+  const [uploadLoading, setUploadLoading] = useState(false)
+
+  // Get dynamic questions based on selected service
+  const getDynamicQuestions = (service) => {
+    switch (service) {
+      case "web-development":
+        return [
+          {
+            key: "frontendFramework",
+            label: "Frontend Framework/Library",
+            type: "select",
+            required: true,
+            options: [
+              { value: "", label: "Select frontend framework" },
+              { value: "react", label: "React" },
+              { value: "nextjs", label: "Next.js" },
+              { value: "vue", label: "Vue.js" },
+              { value: "nuxt", label: "Nuxt.js" },
+              { value: "angular", label: "Angular" },
+              { value: "svelte", label: "Svelte" },
+              { value: "vanilla-js", label: "Vanilla JavaScript" },
+              { value: "no-preference", label: "No preference / Recommend" }
+            ]
+          },
+          {
+            key: "backendLanguage",
+            label: "Backend Programming Language",
+            type: "select",
+            required: true,
+            options: [
+              { value: "", label: "Select backend language" },
+              { value: "javascript", label: "JavaScript (Node.js)" },
+              { value: "python", label: "Python" },
+              { value: "php", label: "PHP" },
+              { value: "java", label: "Java" },
+              { value: "csharp", label: "C# (.NET)" },
+              { value: "ruby", label: "Ruby" },
+              { value: "go", label: "Go" },
+              { value: "no-preference", label: "No preference / Recommend" }
+            ]
+          },
+          {
+            key: "backendFramework",
+            label: "Backend Framework",
+            type: "select",
+            options: [
+              { value: "", label: "Select backend framework" },
+              { value: "express", label: "Express.js (Node.js)" },
+              { value: "django", label: "Django (Python)" },
+              { value: "flask", label: "Flask (Python)" },
+              { value: "laravel", label: "Laravel (PHP)" },
+              { value: "spring", label: "Spring (Java)" },
+              { value: "dotnet", label: ".NET (C#)" },
+              { value: "rails", label: "Ruby on Rails" },
+              { value: "gin", label: "Gin (Go)" }
+            ]
+          },
+          {
+            key: "database",
+            label: "Database Technology",
+            type: "select",
+            required: true,
+            options: [
+              { value: "", label: "Select database" },
+              { value: "mysql", label: "MySQL" },
+              { value: "postgresql", label: "PostgreSQL" },
+              { value: "mongodb", label: "MongoDB" },
+              { value: "sqlite", label: "SQLite" },
+              { value: "redis", label: "Redis" },
+              { value: "firebase", label: "Firebase Firestore" },
+              { value: "no-preference", label: "No preference / Recommend" }
+            ]
+          },
+          {
+            key: "webFeatures",
+            label: "Web Application Features",
+            type: "textarea",
+            required: true,
+            placeholder: "List web-specific features (user authentication, payment processing, admin dashboard, API endpoints, real-time updates, etc.)"
+          },
+          {
+            key: "hosting",
+            label: "Hosting & Deployment",
+            type: "select",
+            options: [
+              { value: "", label: "Select hosting preference" },
+              { value: "vercel", label: "Vercel" },
+              { value: "netlify", label: "Netlify" },
+              { value: "aws", label: "AWS" },
+              { value: "azure", label: "Microsoft Azure" },
+              { value: "gcp", label: "Google Cloud Platform" },
+              { value: "digitalocean", label: "DigitalOcean" },
+              { value: "shared-hosting", label: "Shared Hosting" }
+            ]
+          }
+        ]
+
+      case "mobile-development":
+        return [
+          {
+            key: "mobileStack",
+            label: "Mobile Development Technology",
+            type: "select",
+            required: true,
+            options: [
+              { value: "", label: "Select mobile technology" },
+              { value: "react-native", label: "React Native" },
+              { value: "flutter", label: "Flutter" },
+              { value: "native-ios", label: "Native iOS (Swift)" },
+              { value: "native-android", label: "Native Android (Kotlin/Java)" },
+              { value: "xamarin", label: "Xamarin" },
+              { value: "ionic", label: "Ionic" },
+              { value: "cordova", label: "Apache Cordova/PhoneGap" },
+              { value: "no-preference", label: "No preference / Recommend" }
+            ]
+          },
+          {
+            key: "targetPlatforms",
+            label: "Target Mobile Platforms",
+            type: "select",
+            required: true,
+            options: [
+              { value: "", label: "Select target platforms" },
+              { value: "ios-only", label: "iOS Only" },
+              { value: "android-only", label: "Android Only" },
+              { value: "both-platforms", label: "Both iOS & Android" },
+              { value: "cross-platform", label: "Cross-platform Solution" }
+            ]
+          },
+          {
+            key: "appType",
+            label: "Mobile App Type",
+            type: "select",
+            required: true,
+            options: [
+              { value: "", label: "Select app type" },
+              { value: "native", label: "Native Mobile App" },
+              { value: "hybrid", label: "Hybrid App" },
+              { value: "pwa", label: "Progressive Web App (PWA)" },
+              { value: "cross-platform", label: "Cross-platform App" }
+            ]
+          },
+          {
+            key: "mobileFeatures",
+            label: "Mobile-Specific Features",
+            type: "textarea",
+            required: true,
+            placeholder: "List mobile features (push notifications, camera access, GPS/location, offline mode, biometric authentication, device sensors, etc.)"
+          },
+          {
+            key: "backendIntegration",
+            label: "Backend & API Integration",
+            type: "select",
+            options: [
+              { value: "", label: "Select backend needs" },
+              { value: "rest-api", label: "REST API" },
+              { value: "graphql", label: "GraphQL API" },
+              { value: "firebase", label: "Firebase Backend" },
+              { value: "aws-amplify", label: "AWS Amplify" },
+              { value: "custom-backend", label: "Custom Backend Development" },
+              { value: "existing-api", label: "Integrate with Existing API" }
+            ]
+          },
+          {
+            key: "appStoreDeployment",
+            label: "App Store Deployment",
+            type: "select",
+            options: [
+              { value: "", label: "Select deployment target" },
+              { value: "app-store", label: "Apple App Store" },
+              { value: "google-play", label: "Google Play Store" },
+              { value: "both-stores", label: "Both App Stores" },
+              { value: "enterprise", label: "Enterprise Distribution" },
+              { value: "beta-testing", label: "Beta Testing Only" }
+            ]
+          }
+        ]
+
+      case "software-development":
+        return [
+          {
+            key: "softwareType",
+            label: "Type of Software",
+            type: "select",
+            required: true,
+            options: [
+              { value: "", label: "Select software type" },
+              { value: "desktop-app", label: "Desktop Application" },
+              { value: "web-app", label: "Web Application" },
+              { value: "mobile-app", label: "Mobile Application" },
+              { value: "api-service", label: "API/Web Service" },
+              { value: "automation-tool", label: "Automation Tool" },
+              { value: "data-processing", label: "Data Processing Software" },
+              { value: "custom-solution", label: "Custom Software Solution" }
+            ]
+          },
+          {
+            key: "programmingLanguage",
+            label: "Preferred Programming Language",
+            type: "select",
+            required: true,
+            options: [
+              { value: "", label: "Select programming language" },
+              { value: "python", label: "Python" },
+              { value: "javascript", label: "JavaScript/TypeScript" },
+              { value: "java", label: "Java" },
+              { value: "csharp", label: "C#" },
+              { value: "cpp", label: "C++" },
+              { value: "go", label: "Go" },
+              { value: "rust", label: "Rust" },
+              { value: "php", label: "PHP" },
+              { value: "ruby", label: "Ruby" },
+              { value: "no-preference", label: "No preference / Recommend" }
+            ]
+          },
+          {
+            key: "targetPlatform",
+            label: "Target Platform",
+            type: "select",
+            required: true,
+            options: [
+              { value: "", label: "Select target platform" },
+              { value: "windows", label: "Windows" },
+              { value: "macos", label: "macOS" },
+              { value: "linux", label: "Linux" },
+              { value: "cross-platform", label: "Cross-platform (Windows/Mac/Linux)" },
+              { value: "web-based", label: "Web-based" },
+              { value: "cloud", label: "Cloud/Server-based" }
+            ]
+          },
+          {
+            key: "softwareFeatures",
+            label: "Software Features & Requirements",
+            type: "textarea",
+            required: true,
+            placeholder: "Describe the main features and functionality needed for your software"
+          },
+          {
+            key: "integrationNeeds",
+            label: "Integration Requirements",
+            type: "textarea",
+            placeholder: "Any specific integrations needed (databases, APIs, third-party services, hardware, etc.)"
+          },
+          {
+            key: "performanceRequirements",
+            label: "Performance Requirements",
+            type: "select",
+            options: [
+              { value: "", label: "Select performance needs" },
+              { value: "standard", label: "Standard Performance" },
+              { value: "high-performance", label: "High Performance" },
+              { value: "real-time", label: "Real-time Processing" },
+              { value: "enterprise-scale", label: "Enterprise Scale" }
+            ]
+          }
+        ]
+
+      case "efuyegela-publishers":
+        return [
+          {
+            key: "contentType",
+            label: "Type of Content",
+            type: "select",
+            required: true,
+            options: [
+              { value: "", label: "Select content type" },
+              { value: "book", label: "Book Publishing" },
+              { value: "ebook", label: "E-book Publishing" },
+              { value: "magazine", label: "Magazine/Periodical" },
+              { value: "digital-content", label: "Digital Content" },
+              { value: "educational", label: "Educational Materials" },
+              { value: "creative-portfolio", label: "Creative Portfolio" },
+              { value: "blog-content", label: "Blog Content" },
+              { value: "newsletter", label: "Newsletter" }
+            ]
+          },
+          {
+            key: "contentGenre",
+            label: "Content Genre/Category",
+            type: "select",
+            options: [
+              { value: "", label: "Select genre" },
+              { value: "fiction", label: "Fiction" },
+              { value: "non-fiction", label: "Non-Fiction" },
+              { value: "educational", label: "Educational" },
+              { value: "business", label: "Business" },
+              { value: "technology", label: "Technology" },
+              { value: "lifestyle", label: "Lifestyle" },
+              { value: "health", label: "Health & Wellness" },
+              { value: "arts", label: "Arts & Culture" },
+              { value: "other", label: "Other" }
+            ]
+          },
+          {
+            key: "targetAudience",
+            label: "Target Audience",
+            type: "textarea",
+            required: true,
+            placeholder: "Describe your target audience in detail (age range, interests, demographics, reading habits, etc.)"
+          },
+          {
+            key: "contentLength",
+            label: "Expected Content Length",
+            type: "select",
+            options: [
+              { value: "", label: "Select content length" },
+              { value: "short-form", label: "Short-form (Articles, Blog posts)" },
+              { value: "medium-form", label: "Medium-form (Guides, Reports)" },
+              { value: "long-form", label: "Long-form (Books, Manuals)" },
+              { value: "series", label: "Content Series" },
+              { value: "ongoing", label: "Ongoing Publication" }
+            ]
+          },
+          {
+            key: "distributionChannels",
+            label: "Distribution Channels",
+            type: "textarea",
+            placeholder: "Where do you plan to distribute? (Print, digital platforms, websites, social media, etc.)"
+          }
+        ]
+
+      case "efuyegela-consultants":
+        return [
+          {
+            key: "consultingArea",
+            label: "Primary Consulting Area",
+            type: "select",
+            required: true,
+            options: [
+              { value: "", label: "Select consulting area" },
+              { value: "business-strategy", label: "Business Strategy" },
+              { value: "digital-transformation", label: "Digital Transformation" },
+              { value: "creative-direction", label: "Creative Direction" },
+              { value: "market-analysis", label: "Market Analysis" },
+              { value: "process-optimization", label: "Process Optimization" },
+              { value: "brand-development", label: "Brand Development" },
+              { value: "marketing-strategy", label: "Marketing Strategy" },
+              { value: "organizational-change", label: "Organizational Change" },
+              { value: "technology-consulting", label: "Technology Consulting" }
+            ]
+          },
+          {
+            key: "businessStage",
+            label: "Current Business Stage",
+            type: "select",
+            options: [
+              { value: "", label: "Select business stage" },
+              { value: "startup", label: "Startup (0-2 years)" },
+              { value: "growth", label: "Growth Stage (2-5 years)" },
+              { value: "established", label: "Established (5+ years)" },
+              { value: "enterprise", label: "Enterprise/Large Corporation" },
+              { value: "non-profit", label: "Non-profit Organization" }
+            ]
+          },
+          {
+            key: "teamSize",
+            label: "Team/Organization Size",
+            type: "select",
+            options: [
+              { value: "", label: "Select team size" },
+              { value: "solo", label: "Solo/Individual" },
+              { value: "small", label: "Small Team (2-10 people)" },
+              { value: "medium", label: "Medium Team (11-50 people)" },
+              { value: "large", label: "Large Team (51-200 people)" },
+              { value: "enterprise", label: "Enterprise (200+ people)" }
+            ]
+          },
+          {
+            key: "currentChallenges",
+            label: "Current Challenges",
+            type: "textarea",
+            required: true,
+            placeholder: "Describe the main challenges you're facing that you need consulting help with"
+          },
+          {
+            key: "projectScope",
+            label: "Desired Project Scope",
+            type: "select",
+            required: true,
+            options: [
+              { value: "", label: "Select project scope" },
+              { value: "assessment", label: "Initial Assessment & Recommendations" },
+              { value: "strategy-development", label: "Strategy Development" },
+              { value: "implementation", label: "Full Implementation Support" },
+              { value: "ongoing-support", label: "Ongoing Advisory Support" },
+              { value: "training", label: "Team Training & Development" },
+              { value: "comprehensive", label: "Comprehensive Transformation" }
+            ]
+          },
+          {
+            key: "successMetrics",
+            label: "Success Metrics",
+            type: "textarea",
+            placeholder: "How will you measure success? What are your key performance indicators?"
+          }
+        ]
+
+      case "efuyegela-events":
+        return [
+          {
+            key: "eventType",
+            label: "Event Type",
+            type: "select",
+            required: true,
+            options: [
+              { value: "", label: "Select event type" },
+              { value: "product-launch", label: "Product Launch" },
+              { value: "conference", label: "Conference/Summit" },
+              { value: "workshop", label: "Workshop/Training" },
+              { value: "networking", label: "Networking Event" },
+              { value: "virtual-event", label: "Virtual Event" },
+              { value: "hybrid-event", label: "Hybrid Event (In-person + Virtual)" },
+              { value: "trade-show", label: "Trade Show/Exhibition" },
+              { value: "seminar", label: "Seminar/Webinar" },
+              { value: "celebration", label: "Celebration/Awards" }
+            ]
+          },
+          {
+            key: "eventFormat",
+            label: "Event Format",
+            type: "select",
+            options: [
+              { value: "", label: "Select event format" },
+              { value: "in-person", label: "In-person Only" },
+              { value: "virtual", label: "Virtual Only" },
+              { value: "hybrid", label: "Hybrid (Both)" }
+            ]
+          },
+          {
+            key: "attendeeCount",
+            label: "Expected Number of Attendees",
+            type: "select",
+            required: true,
+            options: [
+              { value: "", label: "Select attendee count" },
+              { value: "small", label: "Small (10-50 attendees)" },
+              { value: "medium", label: "Medium (51-200 attendees)" },
+              { value: "large", label: "Large (201-500 attendees)" },
+              { value: "very-large", label: "Very Large (500+ attendees)" }
+            ]
+          },
+          {
+            key: "targetAudience",
+            label: "Target Audience",
+            type: "textarea",
+            required: true,
+            placeholder: "Describe your target audience (demographics, interests, professional background, etc.)"
+          },
+          {
+            key: "eventDuration",
+            label: "Event Duration",
+            type: "select",
+            options: [
+              { value: "", label: "Select duration" },
+              { value: "half-day", label: "Half Day (2-4 hours)" },
+              { value: "full-day", label: "Full Day (6-8 hours)" },
+              { value: "multi-day", label: "Multi-day (2-3 days)" },
+              { value: "week-long", label: "Week-long" },
+              { value: "ongoing", label: "Ongoing Series" }
+            ]
+          },
+          {
+            key: "eventGoals",
+            label: "Event Goals & Objectives",
+            type: "textarea",
+            required: true,
+            placeholder: "What are the main goals and objectives for this event? What do you want attendees to achieve?"
+          },
+          {
+            key: "specialRequirements",
+            label: "Special Requirements",
+            type: "textarea",
+            placeholder: "Any special requirements? (AV equipment, catering, accessibility, technology needs, etc.)"
+          }
+        ]
+
+      case "enterprise-software":
+        return [
+          {
+            key: "softwareType",
+            label: "Type of Enterprise Software",
+            type: "select",
+            required: true,
+            options: [
+              { value: "", label: "Select software type" },
+              { value: "erp", label: "ERP (Enterprise Resource Planning)" },
+              { value: "crm", label: "CRM (Customer Relationship Management)" },
+              { value: "hrms", label: "HRMS (Human Resource Management)" },
+              { value: "inventory", label: "Inventory Management" },
+              { value: "accounting", label: "Accounting & Finance" },
+              { value: "project-management", label: "Project Management" },
+              { value: "business-intelligence", label: "Business Intelligence/Analytics" },
+              { value: "workflow", label: "Workflow Management" },
+              { value: "custom", label: "Custom Enterprise Solution" }
+            ]
+          },
+          {
+            key: "companySize",
+            label: "Company Size",
+            type: "select",
+            required: true,
+            options: [
+              { value: "", label: "Select company size" },
+              { value: "small", label: "Small (10-50 employees)" },
+              { value: "medium", label: "Medium (51-200 employees)" },
+              { value: "large", label: "Large (201-1000 employees)" },
+              { value: "enterprise", label: "Enterprise (1000+ employees)" }
+            ]
+          },
+          {
+            key: "techStack",
+            label: "Technology Preference",
+            type: "select",
+            required: true,
+            options: [
+              { value: "", label: "Select technology preference" },
+              { value: "microsoft-stack", label: "Microsoft Stack (.NET, SQL Server)" },
+              { value: "java-enterprise", label: "Java Enterprise (Spring, Oracle)" },
+              { value: "cloud-native", label: "Cloud Native (AWS/Azure/GCP)" },
+              { value: "open-source", label: "Open Source Solutions" },
+              { value: "hybrid", label: "Hybrid Approach" },
+              { value: "no-preference", label: "No preference / Recommend" }
+            ]
+          },
+          {
+            key: "currentSystems",
+            label: "Current Systems in Use",
+            type: "textarea",
+            required: true,
+            placeholder: "List current software systems, databases, and tools your company uses"
+          },
+          {
+            key: "integrationNeeds",
+            label: "Integration Requirements",
+            type: "textarea",
+            required: true,
+            placeholder: "Describe existing systems that need integration (ERP, CRM, databases, third-party APIs, etc.)"
+          },
+          {
+            key: "securityRequirements",
+            label: "Security & Compliance Requirements",
+            type: "textarea",
+            placeholder: "Any specific security standards or compliance requirements? (GDPR, HIPAA, SOX, etc.)"
+          },
+          {
+            key: "scalabilityNeeds",
+            label: "Scalability Requirements",
+            type: "select",
+            options: [
+              { value: "", label: "Select scalability needs" },
+              { value: "current", label: "Current size only" },
+              { value: "moderate", label: "Moderate growth (2x in 2 years)" },
+              { value: "high", label: "High growth (5x in 2 years)" },
+              { value: "enterprise", label: "Enterprise scale (unlimited)" }
+            ]
+          }
+        ]
+
+      default:
+        return []
+    }
+  }
+
+  const handleFileUpload = async (files) => {
+    setUploadLoading(true)
+    const uploadedFileData = []
+
+    for (const file of files) {
+      try {
+        const formData = new FormData()
+        formData.append('file', file)
+
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData
+        })
+
+        if (response.ok) {
+          const result = await response.json()
+          uploadedFileData.push({
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            url: result.url,
+            uploadedAt: new Date().toISOString()
+          })
+        }
+      } catch (error) {
+        console.error('File upload error:', error)
+      }
+    }
+
+    setUploadedFiles(prev => [...prev, ...uploadedFileData])
+    setUploadLoading(false)
+  }
+
+  const removeFile = (index) => {
+    setUploadedFiles(prev => prev.filter((_, i) => i !== index))
+  }
+
+  const validateDynamicFields = () => {
+    const dynamicQuestions = getDynamicQuestions(formData.service)
+    const requiredFields = dynamicQuestions.filter(q => q.required)
+
+    for (const field of requiredFields) {
+      if (!formData[field.key] || formData[field.key].trim() === '') {
+        alert(`Please fill in the required field: ${field.label}`)
+        return false
+      }
+    }
+    return true
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    // Validate dynamic fields
+    if (!validateDynamicFields()) {
+      return
+    }
+
+    setLoading(true)
+
+    try {
+      const submissionData = {
+        ...formData,
+        files: uploadedFiles,
+        submittedAt: new Date().toISOString()
+      }
+
+      const response = await fetch('/api/submit-form', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(submissionData)
+      })
+
+      if (response.ok) {
+        setSuccess(true)
+        setTimeout(() => {
+          setShowForm(false)
+          setSuccess(false)
+          setFormData({
+            name: "", email: "", service: "", description: "", company: "", phone: "", budget: "", timeline: "",
+            // Web Development
+            frontendFramework: "", backendLanguage: "", backendFramework: "", database: "", webFeatures: "", hosting: "",
+            // Mobile Development
+            mobileStack: "", targetPlatforms: "", appType: "", mobileFeatures: "", backendIntegration: "", appStoreDeployment: "",
+            // Software Development
+            softwareType: "", programmingLanguage: "", targetPlatform: "", softwareFeatures: "", integrationNeeds: "", performanceRequirements: "",
+            // Publishers
+            contentType: "", contentGenre: "", contentLength: "", distributionChannels: "",
+            // Consultants
+            consultingArea: "", businessStage: "", teamSize: "", currentChallenges: "", projectScope: "", successMetrics: "",
+            // Events
+            eventType: "", eventFormat: "", attendeeCount: "", eventDuration: "", eventGoals: "", specialRequirements: "",
+            // Enterprise Software
+            companySize: "", currentSystems: "", securityRequirements: "", scalabilityNeeds: "",
+            // Legacy fields (keeping for compatibility)
+            techStack: "", platform: "", designStyle: "", targetAudience: "", features: ""
+          })
+          setUploadedFiles([])
+        }, 2000)
+      }
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
-    <BrandingProvider>
-      <div className="h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center overflow-hidden">
-        <div className="container mx-auto px-6 max-w-6xl">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center h-full">
-            
-            {/* Left Side - Hero Content */}
-            <div className="text-center lg:text-left space-y-6">
-              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
-                <Sparkles className="w-4 h-4" />
-                Creative Ecosystem & Software
-              </div>
-              
-              <h1 className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent leading-tight">
-                Efuyegela
-              </h1>
-              
-              <p className="text-lg text-gray-600 leading-relaxed">
-                Creative ecosystem solutions and software development for creators and businesses.
-              </p>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-8">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-12">
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
+            Efuyegela
+          </h1>
+          <p className="text-xl text-gray-600 mb-8">
+            Creative ecosystem solutions and software development
+          </p>
 
-              <div className="flex flex-wrap justify-center lg:justify-start gap-6">
-                <div className="flex items-center gap-2 text-gray-600">
-                  <Users className="w-4 h-4 text-blue-600" />
-                  <span className="font-semibold text-sm">5,000+ Creators</span>
-                </div>
-                <div className="flex items-center gap-2 text-gray-600">
-                  <Clock className="w-4 h-4 text-green-600" />
-                  <span className="font-semibold text-sm">6 Divisions</span>
-                </div>
-                <div className="flex items-center gap-2 text-gray-600">
-                  <Star className="w-4 h-4 text-yellow-500" />
-                  <span className="font-semibold text-sm">Software Dev</span>
-                </div>
-              </div>
+          <button
+            onClick={() => setShowForm(true)}
+            className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all"
+          >
+            Start Project
+          </button>
+        </div>
 
-              {/* Quick Services Grid */}
-              <div className="grid grid-cols-2 gap-3 text-sm">
-                <div className="bg-white/70 backdrop-blur-sm rounded-lg p-3 border border-blue-100 hover:shadow-md transition-shadow">
-                  <div className="font-semibold text-blue-600">📚 Publishers</div>
-                  <div className="text-gray-600">Creative Publishing</div>
+        {showForm && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+              {success ? (
+                <div className="text-center space-y-4">
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+                    <span className="text-green-600 text-2xl">✓</span>
+                  </div>
+                  <h2 className="text-2xl font-bold text-gray-900">Thank You!</h2>
+                  <p className="text-gray-600">Your project request has been submitted successfully.</p>
                 </div>
-                <div className="bg-white/70 backdrop-blur-sm rounded-lg p-3 border border-green-100 hover:shadow-md transition-shadow">
-                  <div className="font-semibold text-green-600">🔧 Consultants</div>
-                  <div className="text-gray-600">Turn-key Solutions</div>
-                </div>
-                <div className="bg-white/70 backdrop-blur-sm rounded-lg p-3 border border-purple-100 hover:shadow-md transition-shadow">
-                  <div className="font-semibold text-purple-600">💻 Software</div>
-                  <div className="text-gray-600">Custom Development</div>
-                </div>
-                <div className="bg-white/70 backdrop-blur-sm rounded-lg p-3 border border-orange-100 hover:shadow-md transition-shadow">
-                  <div className="font-semibold text-orange-600">🧠 Intelligence</div>
-                  <div className="text-gray-600">Ecosystem Mapping</div>
-                </div>
-              </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-4">Start Your Project</h2>
 
-              {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
-                <Dialog open={formDialogOpen} onOpenChange={setFormDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
-                      <Plus className="w-4 h-4 mr-2" />
-                      Start Project
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-                    <SmartForm onClose={() => setFormDialogOpen(false)} />
-                  </DialogContent>
-                </Dialog>
+                  {/* Basic Information */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
+                      <input
+                        type="text"
+                        value={formData.name}
+                        onChange={(e) => setFormData({...formData, name: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required
+                      />
+                    </div>
 
-                <Dialog open={emailDialogOpen} onOpenChange={setEmailDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button variant="outline" size="lg" className="border-blue-200 text-blue-600 hover:bg-blue-50">
-                      <Mail className="w-4 h-4 mr-2" />
-                      Get Updates
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-md">
-                    <EmailVerification onClose={() => setEmailDialogOpen(false)} />
-                  </DialogContent>
-                </Dialog>
-              </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Email Address *</label>
+                      <input
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) => setFormData({...formData, email: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="your.email@example.com"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Company/Organization</label>
+                      <input
+                        type="text"
+                        value={formData.company}
+                        onChange={(e) => setFormData({...formData, company: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                      <input
+                        type="tel"
+                        value={formData.phone}
+                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Service Selection */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Service Needed *</label>
+                    <select
+                      value={formData.service}
+                      onChange={(e) => setFormData({...formData, service: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      required
+                    >
+                      <option value="">Select a service</option>
+                      <option value="efuyegela-publishers">Efuyegela Publishers - Creative Publishing</option>
+                      <option value="efuyegela-consultants">Efuyegela Consultants - Turn-key Solutions</option>
+                      <option value="efuyegela-collectives">Efuyegela Collectives - Community Ecosystem</option>
+                      <option value="efuyegela-intelligence">Efuyegela Intelligence - Ecosystem Mapping</option>
+                      <option value="efuyegela-events">Efuyegela Events - Product Launch & Marketing</option>
+                      <option value="efuyegela-content">Efuyegela Content - Frameworks & Products</option>
+                      <option value="software-development">Software Development - Custom Applications</option>
+                      <option value="web-development">Web Development - Websites & Web Apps</option>
+                      <option value="mobile-development">Mobile Development - iOS & Android</option>
+                      <option value="enterprise-software">Enterprise Software - Business Systems</option>
+                      <option value="creative-software">Creative Software - Tools for Creators</option>
+                    </select>
+                  </div>
+
+                  {/* Dynamic Questions Based on Service */}
+                  {formData.service && getDynamicQuestions(formData.service).length > 0 && (
+                    <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                      <h3 className="text-md font-semibold text-blue-900 mb-3">Service-Specific Questions</h3>
+                      <div className="space-y-4">
+                        {getDynamicQuestions(formData.service).map((question) => (
+                          <div key={question.key}>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              {question.label} {question.required && <span className="text-red-500">*</span>}
+                            </label>
+                            {question.type === "select" ? (
+                              <select
+                                value={formData[question.key] || ""}
+                                onChange={(e) => setFormData({...formData, [question.key]: e.target.value})}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              >
+                                {question.options.map((option) => (
+                                  <option key={option.value} value={option.value}>
+                                    {option.label}
+                                  </option>
+                                ))}
+                              </select>
+                            ) : question.type === "textarea" ? (
+                              <textarea
+                                value={formData[question.key] || ""}
+                                onChange={(e) => setFormData({...formData, [question.key]: e.target.value})}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                rows={3}
+                                placeholder={question.placeholder}
+                              />
+                            ) : (
+                              <input
+                                type="text"
+                                value={formData[question.key] || ""}
+                                onChange={(e) => setFormData({...formData, [question.key]: e.target.value})}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder={question.placeholder}
+                              />
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Project Details */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Budget Range</label>
+                      <select
+                        value={formData.budget}
+                        onChange={(e) => setFormData({...formData, budget: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      >
+                        <option value="">Select budget range</option>
+                        <option value="under-5k">Under $5,000</option>
+                        <option value="5k-15k">$5,000 - $15,000</option>
+                        <option value="15k-50k">$15,000 - $50,000</option>
+                        <option value="50k-plus">$50,000+</option>
+                        <option value="discuss">Let's discuss</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Timeline</label>
+                      <select
+                        value={formData.timeline}
+                        onChange={(e) => setFormData({...formData, timeline: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      >
+                        <option value="">Select timeline</option>
+                        <option value="asap">ASAP</option>
+                        <option value="1-month">Within 1 month</option>
+                        <option value="3-months">Within 3 months</option>
+                        <option value="6-months">Within 6 months</option>
+                        <option value="flexible">Flexible</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Project Description */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Project Description</label>
+                    <textarea
+                      value={formData.description}
+                      onChange={(e) => setFormData({...formData, description: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      rows={4}
+                      placeholder="Tell us about your project, goals, and any specific requirements..."
+                    />
+                  </div>
+
+                  {/* File Upload Section */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Project Files</label>
+                    <p className="text-xs text-gray-500 mb-2">Upload any relevant documents, images, or files related to your project</p>
+
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors">
+                      <input
+                        type="file"
+                        multiple
+                        onChange={(e) => handleFileUpload(Array.from(e.target.files))}
+                        className="hidden"
+                        id="file-upload"
+                        accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.gif,.zip,.rar"
+                      />
+                      <label htmlFor="file-upload" className="cursor-pointer">
+                        <div className="text-gray-600">
+                          <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                          <p className="mt-2 text-sm">
+                            <span className="font-medium text-blue-600 hover:text-blue-500">Click to upload files</span> or drag and drop
+                          </p>
+                          <p className="text-xs text-gray-500">PDF, DOC, Images, ZIP up to 10MB each</p>
+                        </div>
+                      </label>
+                    </div>
+
+                    {/* Uploaded Files Display */}
+                    {uploadedFiles.length > 0 && (
+                      <div className="mt-4">
+                        <h4 className="text-sm font-medium text-gray-700 mb-2">Uploaded Files:</h4>
+                        <div className="space-y-2">
+                          {uploadedFiles.map((file, index) => (
+                            <div key={index} className="flex items-center justify-between bg-gray-50 p-2 rounded">
+                              <div className="flex items-center">
+                                <svg className="h-5 w-5 text-gray-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
+                                </svg>
+                                <span className="text-sm text-gray-700">{file.name}</span>
+                                <span className="text-xs text-gray-500 ml-2">({(file.size / 1024 / 1024).toFixed(2)} MB)</span>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => removeFile(index)}
+                                className="text-red-500 hover:text-red-700"
+                              >
+                                <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                                </svg>
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {uploadLoading && (
+                      <div className="mt-2 text-center">
+                        <div className="inline-flex items-center">
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                          <span className="text-sm text-gray-600">Uploading files...</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex gap-3 pt-4">
+                    <button
+                      type="button"
+                      onClick={() => setShowForm(false)}
+                      className="flex-1 px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="flex-1 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-md hover:from-blue-700 hover:to-purple-700 disabled:opacity-50"
+                    >
+                      {loading ? "Submitting..." : "Submit"}
+                    </button>
+                  </div>
+                </form>
+              )}
             </div>
+          </div>
+        )}
 
-            {/* Right Side - Services Overview */}
-            <div className="space-y-4">
-              <Card className="bg-white/80 backdrop-blur-sm border-blue-100 hover:shadow-lg transition-shadow">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-lg text-blue-700 flex items-center gap-2">
-                    <span className="text-2xl">🎨</span>
-                    Creative Ecosystem
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <p className="text-gray-600 text-sm mb-3">
-                    Six specialized divisions supporting creators at every stage of their journey.
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs">Publishers</span>
-                    <span className="bg-green-100 text-green-700 px-2 py-1 rounded text-xs">Consultants</span>
-                    <span className="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs">Collectives</span>
-                    <span className="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs">Intelligence</span>
-                    <span className="bg-red-100 text-red-700 px-2 py-1 rounded text-xs">Events</span>
-                    <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded text-xs">Content</span>
-                  </div>
-                </CardContent>
-              </Card>
+        {/* Advertisement Space */}
+        <div className="mt-12">
+          <AdZone position="inline" />
+        </div>
 
-              <Card className="bg-white/80 backdrop-blur-sm border-purple-100 hover:shadow-lg transition-shadow">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-lg text-purple-700 flex items-center gap-2">
-                    <span className="text-2xl">💻</span>
-                    Software Development
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <p className="text-gray-600 text-sm mb-3">
-                    Custom software solutions bringing your creative ideas to life.
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs">Web Apps</span>
-                    <span className="bg-green-100 text-green-700 px-2 py-1 rounded text-xs">Mobile</span>
-                    <span className="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs">Enterprise</span>
-                    <span className="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs">Creative Tools</span>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-white/80 backdrop-blur-sm border-green-100 hover:shadow-lg transition-shadow">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-lg text-green-700 flex items-center gap-2">
-                    <span className="text-2xl">🚀</span>
-                    Why Choose Efuyegela
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <div className="space-y-2 text-sm text-gray-600">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      <span>Complete ecosystem support</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span>Custom software development</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                      <span>Creator-focused solutions</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 border border-blue-100">
+            <h3 className="text-lg font-semibold text-blue-700 mb-2">Creative Ecosystem</h3>
+            <p className="text-gray-600 text-sm">Six specialized divisions supporting creators.</p>
+          </div>
+          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 border border-purple-100">
+            <h3 className="text-lg font-semibold text-purple-700 mb-2">Software Development</h3>
+            <p className="text-gray-600 text-sm">Custom software solutions for your ideas.</p>
+          </div>
+          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 border border-green-100">
+            <h3 className="text-lg font-semibold text-green-700 mb-2">Why Choose Us</h3>
+            <p className="text-gray-600 text-sm">Complete ecosystem and creator-focused solutions.</p>
           </div>
         </div>
 
-        {/* Background Elements */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-400/10 to-purple-600/10 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-indigo-400/10 to-pink-600/10 rounded-full blur-3xl"></div>
+        {/* Footer Advertisement */}
+        <div className="mt-12">
+          <AdZone position="footer" />
         </div>
       </div>
-    </BrandingProvider>
+    </div>
   )
 }

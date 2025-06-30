@@ -8,6 +8,8 @@ import { Star, Users, Clock, ArrowRight, Phone, Mail, Globe } from "lucide-react
 
 export function AdZone({ position }) {
   const [currentAd, setCurrentAd] = useState(0)
+  const [advertisements, setAdvertisements] = useState([])
+  const [loading, setLoading] = useState(true)
 
   // Mock user role - in real app this would come from auth context
   const userRole = "user" // or "admin"
@@ -17,57 +19,87 @@ export function AdZone({ position }) {
     return null
   }
 
-  // Rotate ads every 10 seconds for sidebar
+  // Fetch advertisements from API
   useEffect(() => {
-    if (position === "sidebar") {
+    const fetchAdvertisements = async () => {
+      try {
+        const response = await fetch(`/api/advertisements?position=${position}&status=active&limit=5`)
+        if (response.ok) {
+          const data = await response.json()
+          setAdvertisements(data.data || [])
+        }
+      } catch (error) {
+        console.error('Failed to fetch advertisements:', error)
+        // Fallback to empty array
+        setAdvertisements([])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchAdvertisements()
+  }, [position])
+
+  // Rotate ads every 10 seconds for sidebar and other positions with multiple ads
+  useEffect(() => {
+    if (advertisements.length > 1) {
       const interval = setInterval(() => {
-        setCurrentAd(prev => (prev + 1) % 3)
+        setCurrentAd(prev => (prev + 1) % advertisements.length)
       }, 10000)
       return () => clearInterval(interval)
     }
-  }, [position])
+  }, [advertisements.length])
 
   const getAdContent = () => {
+    if (loading) {
+      return (
+        <div className="bg-gray-100 p-4 text-center">
+          <p className="text-sm text-gray-500">Loading advertisement...</p>
+        </div>
+      )
+    }
+
+    if (advertisements.length === 0) {
+      return null // Don't show anything if no ads
+    }
+
+    const currentAdvertisement = advertisements[currentAd] || advertisements[0]
+
     switch (position) {
       case "header":
         return (
           <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-4 text-center">
-            <p className="text-sm font-medium">🚀 Special Offer: 20% off all web development projects this month!</p>
+            <p className="text-sm font-medium">{currentAdvertisement.content}</p>
           </div>
         )
 
       case "sidebar":
-        const sidebarAds = [
-          {
-            title: "SEO Audit",
-            description: "Comprehensive SEO analysis to boost your rankings",
-            price: "Starting at $299",
-            rating: "4.9",
-            reviews: "150+",
-            icon: Globe,
-            color: "from-blue-500 to-cyan-500"
-          },
-          {
-            title: "Local SEO",
-            description: "Dominate local search results in your area",
-            price: "Starting at $599/mo",
-            rating: "4.8",
-            reviews: "89+",
-            icon: Phone,
-            color: "from-purple-500 to-pink-500"
-          },
-          {
-            title: "Content SEO",
-            description: "SEO-optimized content that ranks and converts",
-            price: "Starting at $799/mo",
-            rating: "4.9",
-            reviews: "200+",
-            icon: Mail,
-            color: "from-green-500 to-emerald-500"
-          }
-        ]
+        // Enhanced sidebar ads with fallback design
+        const sidebarAdData = {
+          title: currentAdvertisement.title,
+          description: currentAdvertisement.content,
+          price: "Contact for Quote",
+          rating: "4.9",
+          reviews: "150+",
+          icon: Globe,
+          color: "from-blue-500 to-cyan-500"
+        }
 
-        const ad = sidebarAds[currentAd]
+        // Rotate colors based on current ad index
+        const colors = [
+          "from-blue-500 to-cyan-500",
+          "from-purple-500 to-pink-500",
+          "from-green-500 to-emerald-500",
+          "from-orange-500 to-red-500",
+          "from-indigo-500 to-purple-500"
+        ]
+        sidebarAdData.color = colors[currentAd % colors.length]
+
+        // Rotate icons
+        const icons = [Globe, Phone, Mail, Star, ArrowRight]
+        sidebarAdData.icon = icons[currentAd % icons.length]
+
+        const ad = sidebarAdData
         const IconComponent = ad.icon
 
         return (
@@ -115,9 +147,9 @@ export function AdZone({ position }) {
               <div className="mx-auto w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mb-6">
                 <Star className="w-8 h-8 text-white" />
               </div>
-              <CardTitle className="text-2xl text-gray-900 mb-4">Professional Services</CardTitle>
+              <CardTitle className="text-2xl text-gray-900 mb-4">{currentAdvertisement.title}</CardTitle>
               <CardDescription className="text-lg text-gray-600 mb-6">
-                Get high-quality solutions tailored to your business needs with our professional team.
+                {currentAdvertisement.content}
               </CardDescription>
               <div className="grid grid-cols-3 gap-4 mb-6">
                 <div className="text-center">
@@ -125,7 +157,7 @@ export function AdZone({ position }) {
                   <div className="text-sm text-gray-600">Projects</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-green-600">4.9★</div>
+                  <div className="text-2xl font-bold text-green-600">4.9</div>
                   <div className="text-sm text-gray-600">Rating</div>
                 </div>
                 <div className="text-center">
@@ -143,19 +175,13 @@ export function AdZone({ position }) {
 
       case "footer":
         return (
-          <div className="bg-gray-900 text-white p-8 text-center">
-            <div className="max-w-4xl mx-auto">
-              <h3 className="text-xl font-bold mb-2">Ready to Get Started?</h3>
-              <p className="text-gray-300 mb-4">
-                Join over 500+ satisfied clients who trust us with their digital projects.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="bg-blue-600 text-white py-3 px-6 rounded hover:bg-blue-700">View Portfolio</button>
-                <button className="border border-white text-white py-3 px-6 rounded hover:bg-white hover:text-gray-900">
-                  Read Testimonials
-                </button>
-              </div>
-            </div>
+          <div className="bg-gradient-to-r from-gray-800 to-gray-900 text-white p-6 text-center">
+            <h3 className="text-lg font-bold mb-2">{currentAdvertisement.title}</h3>
+            <p className="text-gray-300 mb-4">{currentAdvertisement.content}</p>
+            <Button variant="outline" className="border-white text-white hover:bg-white hover:text-gray-900">
+              Learn More
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
           </div>
         )
 

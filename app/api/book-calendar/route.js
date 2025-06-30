@@ -1,6 +1,6 @@
-import { type NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 
-export async function POST(request: NextRequest) {
+export async function POST(request) {
   try {
     const { email, slotId, datetime } = await request.json()
 
@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-async function bookCalendarSlot(email: string, slotId: string, datetime: string): Promise<string> {
+async function bookCalendarSlot(email, slotId, datetime) {
   // Mock booking - replace with Google Calendar API
   const bookingId = `booking_${Date.now()}`
   console.log("Booking calendar slot:", { email, slotId, datetime, bookingId })
@@ -56,7 +56,7 @@ async function bookCalendarSlot(email: string, slotId: string, datetime: string)
   return bookingId
 }
 
-async function sendCalendarInvite(email: string, datetime: string): Promise<void> {
+async function sendCalendarInvite(email, datetime) {
   // Mock calendar invite
   console.log("Sending calendar invite to:", email, "for:", datetime)
 

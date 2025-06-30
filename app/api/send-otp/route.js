@@ -34,6 +34,14 @@ function isRateLimited(email) {
 
 async function sendEmailOTP(email, otp) {
   try {
+    // Check if email credentials are properly configured
+    if (!process.env.SMTP_USER || !process.env.SMTP_PASS ||
+        process.env.SMTP_USER.includes('demo') || process.env.SMTP_PASS.includes('demo') ||
+        process.env.SMTP_USER.trim() === '' || process.env.SMTP_PASS.trim() === '') {
+      console.log(`📧 Email disabled - Demo/missing credentials. OTP for ${email}: ${otp}`)
+      return { success: true }
+    }
+
     // Configure email transporter
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST || 'smtp.gmail.com',

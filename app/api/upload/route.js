@@ -1,11 +1,12 @@
-import { type NextRequest, NextResponse } from "next/server"
-import { writeFile } from "fs/promises"
+import { NextResponse } from "next/server"
+import { writeFile, mkdir } from "fs/promises"
 import { join } from "path"
+import { existsSync } from "fs"
 
-export async function POST(request: NextRequest) {
+export async function POST(request) {
   try {
     const data = await request.formData()
-    const file: File | null = data.get("file") as unknown as File
+    const file = data.get("file")
 
     if (!file) {
       return NextResponse.json({ error: "No file uploaded" }, { status: 400 })
@@ -22,8 +23,14 @@ export async function POST(request: NextRequest) {
       "image/png",
       "image/jpeg",
       "image/gif",
+      "image/webp",
       "application/msword",
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "text/plain",
+      "application/zip",
+      "application/x-rar-compressed",
+      "application/vnd.ms-excel",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     ]
 
     if (!allowedTypes.includes(file.type)) {
@@ -33,10 +40,16 @@ export async function POST(request: NextRequest) {
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
 
+    // Ensure uploads directory exists
+    const uploadsDir = join(process.cwd(), "public/uploads")
+    if (!existsSync(uploadsDir)) {
+      await mkdir(uploadsDir, { recursive: true })
+    }
+
     // Generate unique filename
     const timestamp = Date.now()
-    const filename = `${timestamp}-${file.name}`
-    const path = join(process.cwd(), "public/uploads", filename)
+    const filename = `${timestamp}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`
+    const path = join(uploadsDir, filename)
 
     // Save file
     await writeFile(path, buffer)

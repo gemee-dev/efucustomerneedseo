@@ -6,6 +6,15 @@ const nextConfig = {
     unoptimized: true,
     domains: ['placeholder.svg', 'via.placeholder.com'],
   },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
+  poweredByHeader: false,
+  compress: true,
+  swcMinify: true,
+  experimental: {
+    serverComponentsExternalPackages: ['mongoose'],
+  },
   async headers() {
     return [
       {

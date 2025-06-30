@@ -8,7 +8,7 @@ export async function POST(request) {
     const formData = await request.json()
 
     // Enhanced validation
-    const requiredFields = ['name', 'email', 'service', 'description']
+    const requiredFields = ['name', 'email', 'service']
     const missingFields = requiredFields.filter(field => !formData[field])
 
     if (missingFields.length > 0) {
@@ -66,11 +66,13 @@ export async function POST(request) {
       service: formData.service,
       budget: formData.budget || null,
       timeline: formData.timeline || null,
-      description: formData.description,
+      description: formData.description || null,
       phone: formData.phone || null,
       website: formData.website || null,
+      files: JSON.stringify(formData.files || []),
       ip_address: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || null,
-      user_agent: request.headers.get('user-agent') || null
+      user_agent: request.headers.get('user-agent') || null,
+      submitted_at: formData.submittedAt || new Date().toISOString()
     }
 
     // Save to database
@@ -106,6 +108,14 @@ export async function POST(request) {
 
 async function sendConfirmationEmail(submission) {
   try {
+    // Check if email credentials are properly configured
+    if (!process.env.SMTP_USER || !process.env.SMTP_PASS ||
+        process.env.SMTP_USER.includes('demo') || process.env.SMTP_PASS.includes('demo') ||
+        process.env.SMTP_USER.trim() === '' || process.env.SMTP_PASS.trim() === '') {
+      console.log(`📧 Email disabled - Demo/missing credentials. Confirmation email for ${submission.email}`)
+      return
+    }
+
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST || 'smtp.gmail.com',
       port: process.env.SMTP_PORT || 587,
@@ -119,7 +129,7 @@ async function sendConfirmationEmail(submission) {
     const mailOptions = {
       from: process.env.FROM_EMAIL || 'noreply@customerneedseo.com',
       to: submission.email,
-      subject: 'SEO Project Submission Received - Customer Need SEO',
+      subject: 'Project Submission Received - Customer Need SEO',
       html: `
         <!DOCTYPE html>
         <html>
