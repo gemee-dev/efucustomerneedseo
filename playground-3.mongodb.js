@@ -273,3 +273,125 @@ async function playground() {
 if (import.meta.url === `file://${process.argv[1]}`) {
   playground().then(() => process.exit(0)).catch(console.error)
 }
+// Switch to efuyegela database
+use('efuyegela');
+
+// 1. Create Admin Users
+db.admins.deleteMany({}); // Clear existing
+
+// Hash passwords (you'll need to replace with actual hashed passwords)
+// For now, we'll create with plain text and update later
+db.admins.insertMany([
+  {
+    email: 'gemechu',
+    password: '$2a$12$YourHashedPasswordHere', // Will be updated by app
+    name: 'Gemechu Admin',
+    role: 'super_admin',
+    created_at: new Date(),
+    updated_at: new Date()
+  },
+  {
+    email: 'gbonsa2@gmail.com', 
+    password: '$2a$12$YourHashedPasswordHere', // Will be updated by app
+    name: 'Gbonsa Admin',
+    role: 'admin',
+    created_at: new Date(),
+    updated_at: new Date()
+  }
+]);
+
+// 2. Create Sample Advertisements
+db.advertisements.deleteMany({}); // Clear existing
+
+db.advertisements.insertMany([
+  {
+    position: 'header',
+    title: 'Special Launch Offer',
+    content: 'Get 30% off all web development projects this month! Limited time offer for new clients.',
+    status: 'active',
+    created_at: new Date(),
+    updated_at: new Date()
+  },
+  {
+    position: 'inline',
+    title: 'Professional Web Development Services',
+    content: 'Transform your business with our expert web development solutions. Custom websites, e-commerce platforms, and web applications built to scale.',
+    status: 'active',
+    created_at: new Date(),
+    updated_at: new Date()
+  },
+  {
+    position: 'sidebar',
+    title: 'Mobile App Development',
+    content: 'Native and cross-platform mobile applications for iOS and Android. React Native and Flutter expertise.',
+    status: 'active',
+    created_at: new Date(),
+    updated_at: new Date()
+  },
+  {
+    position: 'footer',
+    title: 'Free Consultation Available',
+    content: 'Schedule a free 30-minute consultation to discuss your project requirements and get expert advice.',
+    status: 'active',
+    created_at: new Date(),
+    updated_at: new Date()
+  }
+]);
+
+// 3. Create Sample Submissions
+db.submissions.deleteMany({}); // Clear existing
+
+db.submissions.insertMany([
+  {
+    name: 'John Smith',
+    email: 'john.smith@example.com',
+    company: 'Tech Startup Inc',
+    service: 'Web Development',
+    budget: '5k-10k',
+    timeline: '2-3 months',
+    description: 'Need a modern e-commerce website with payment integration',
+    frontend_framework: 'React',
+    backend_language: 'Node.js',
+    backend_framework: 'Express.js',
+    database: 'MongoDB',
+    web_features: ['User Authentication', 'Payment Integration', 'Admin Dashboard'],
+    hosting: 'Cloud (AWS/Azure)',
+    status: 'received',
+    created_at: new Date(Date.now() - 86400000), // 1 day ago
+    updated_at: new Date(Date.now() - 86400000)
+  },
+  {
+    name: 'Sarah Johnson',
+    email: 'sarah.j@company.com',
+    company: 'Marketing Agency',
+    service: 'Mobile Development',
+    budget: '10k-25k',
+    timeline: '3-6 months',
+    description: 'Cross-platform mobile app for client management',
+    mobile_stack: 'React Native',
+    target_platforms: ['iOS', 'Android'],
+    app_type: 'Business/Productivity',
+    mobile_features: ['Push Notifications', 'Offline Support', 'Real-time Chat'],
+    backend_integration: 'Yes',
+    app_store_deployment: 'Yes',
+    status: 'in_progress',
+    created_at: new Date(Date.now() - 172800000), // 2 days ago
+    updated_at: new Date(Date.now() - 86400000)
+  }
+]);
+
+// 4. Create Indexes for Performance
+db.admins.createIndex({ email: 1 }, { unique: true });
+db.submissions.createIndex({ email: 1 });
+db.submissions.createIndex({ status: 1 });
+db.submissions.createIndex({ service: 1 });
+db.submissions.createIndex({ created_at: -1 });
+db.advertisements.createIndex({ position: 1 });
+db.advertisements.createIndex({ status: 1 });
+
+// 5. Verify Data
+print("=== Database Initialization Complete ===");
+print("Admin users:", db.admins.countDocuments());
+print("Advertisements:", db.advertisements.countDocuments());
+print("Submissions:", db.submissions.countDocuments());
+print("=== Ready for Deployment ===");
