@@ -13,7 +13,7 @@ ADMIN_EMAIL=gemechu
 
 ADMIN_PASSWORD=daniel
 
-NEXT_PUBLIC_APP_URL=https://efucustomerneedseo.vercel.app
+NEXT_PUBLIC_APP_URL=https://customerneedseo.vercel.app
 ```
 
 ## Optional Variables (Email Disabled)
@@ -43,13 +43,13 @@ GOOGLE_PRIVATE_KEY=
 1. Go to [vercel.com](https://vercel.com)
 2. Sign in with GitHub
 3. Click "New Project"
-4. Import repository: `gemee-dev/efucustomerneedseo`
+4. Import repository: `Zemenaytech/customerneedseo`
 5. Add the environment variables above
 6. Deploy!
 
 ## Admin Access After Deployment
 
-- **URL**: https://efucustomerneedseo.vercel.app/admin
+- **URL**: https://customerneedseo.vercel.app/admin
 - **Username**: gemechu
 - **Password**: daniel
 

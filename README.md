@@ -4,8 +4,8 @@ A professional lead generation form application built with Next.js, featuring dy
 
 ## 🚀 Live Demo
 
-- **Website**: [https://efucustomerneedseo.vercel.app](https://efucustomerneedseo.vercel.app)
-- **Admin Dashboard**: [https://efucustomerneedseo.vercel.app/admin](https://efucustomerneedseo.vercel.app/admin)
+- **Website**: [https://customerneedseo.vercel.app](https://customerneedseo.vercel.app)
+- **Admin Dashboard**: [https://customerneedseo.vercel.app/admin](https://customerneedseo.vercel.app/admin)
 
 ## 🔐 Admin Access
 
@@ -80,8 +80,8 @@ A professional lead generation form application built with Next.js, featuring dy
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/gemee-dev/efucustomerneedseo.git
-   cd efucustomerneedseo
+   git clone https://github.com/Zemenaytech/customerneedseo.git
+   cd customerneedseo
    ```
 
 2. **Install dependencies**
@@ -129,7 +129,7 @@ A professional lead generation form application built with Next.js, featuring dy
 
 2. **Deploy on Vercel**
    - Go to [vercel.com](https://vercel.com)
-   - Import repository: `gemee-dev/efucustomerneedseo`
+   - Import repository: `Zemenaytech/customerneedseo`
    - Add environment variables (see VERCEL_ENV_VARIABLES.md)
    - Deploy
 
@@ -139,13 +139,13 @@ MONGODB_URI=mongodb+srv://gemegold:gemegold@cluster0.eashhao.mongodb.net/efuyege
 JWT_SECRET=efu-super-secret-jwt-key-2024-production-gemegold-efuyegela-secure-token-12345
 ADMIN_EMAIL=gemechu
 ADMIN_PASSWORD=daniel
-NEXT_PUBLIC_APP_URL=https://efucustomerneedseo.vercel.app
+NEXT_PUBLIC_APP_URL=https://customerneedseo.vercel.app
 ```
 
 ## 📁 Project Structure
 
 ```
-efucustomerneedseo/
+customerneedseo/
 ├── app/
 │   ├── admin/                 # Admin dashboard
 │   ├── api/                   # API routes
@@ -249,7 +249,7 @@ efucustomerneedseo/
 
 For support or questions:
 - **Email**: gemechu@efuyegela.com
-- **GitHub Issues**: [Create an issue](https://github.com/gemee-dev/efucustomerneedseo/issues)
+- **GitHub Issues**: [Create an issue](https://github.com/Zemenaytech/customerneedseo/issues)
 
 ## 📄 License
 
