@@ -5,13 +5,7 @@ A professional lead generation form application built with Next.js, featuring dy
 
 
 ##  Admin Access
-
-### Primary Admin
-- **Username**: `gemechu`
-- **Password**: `daniel`
-- **Role**: Super Admin
-
-### Secondary Admin
+ Admin
 - **Username**: `gbonsa2@gmail.com`
 - **Password**: `gemegold*0913`
 - **Role**: Admin
