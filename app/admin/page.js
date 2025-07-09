@@ -528,14 +528,6 @@ function AdminDashboard({ admin, onLogout }) {
                       <div className="text-2xl font-bold text-green-600">{advertisements.filter(ad => ad.status === 'active').length}</div>
                       <div className="text-sm text-gray-600">Active Ads</div>
                     </div>
-                    <div className="bg-white border rounded-lg p-4">
-                      <div className="text-2xl font-bold text-purple-600">1,234</div>
-                      <div className="text-sm text-gray-600">Total Impressions</div>
-                    </div>
-                    <div className="bg-white border rounded-lg p-4">
-                      <div className="text-2xl font-bold text-orange-600">$2,450</div>
-                      <div className="text-sm text-gray-600">Revenue</div>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -718,24 +710,7 @@ function AdminDashboard({ admin, onLogout }) {
                 })()}
 
                 {/* Status and Actions */}
-                <div>
-                  <h4 className="text-md font-semibold text-gray-900 mb-3">Status & Actions</h4>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className="px-3 py-1 text-sm font-medium rounded-full bg-green-100 text-green-800">
-                        {selectedSubmission.status || 'New'}
-                      </span>
-                    </div>
-                    <div className="flex space-x-3">
-                      <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm font-medium">
-                        Contact Client
-                      </button>
-                      <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm font-medium">
-                        Mark as Reviewed
-                      </button>
-                    </div>
-                  </div>
-                </div>
+                
               </div>
             </div>
           </div>
