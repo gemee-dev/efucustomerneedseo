@@ -2,10 +2,19 @@
 
 A professional lead generation form application built with Next.js, featuring dynamic service-specific questions, admin dashboard, and advertisement management system.
 
+## 🚀 Live Demo
 
+- **Website**: [https://efucustomerneedseo.vercel.app](https://efucustomerneedseo.vercel.app)
+- **Admin Dashboard**: [https://efucustomerneedseo.vercel.app/admin](https://efucustomerneedseo.vercel.app/admin)
 
-##  Admin Access
- Admin
+## 🔐 Admin Access
+
+### Primary Admin
+- **Username**: `gemechu`
+- **Password**: `daniel`
+- **Role**: Super Admin
+
+### Secondary Admin
 - **Username**: `gbonsa2@gmail.com`
 - **Password**: `gemegold*0913`
 - **Role**: Admin
@@ -60,6 +69,80 @@ A professional lead generation form application built with Next.js, featuring dy
 - **Styling**: Tailwind CSS with custom design system
 - **Deployment**: Vercel with environment variables
 
+## 📦 Installation & Setup
+
+### Prerequisites
+- Node.js 18+
+- MongoDB Atlas account
+- Git
+
+### Local Development
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/gemee-dev/efucustomerneedseo.git
+   cd efucustomerneedseo
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Environment Setup**
+   ```bash
+   cp .env.example .env.local
+   ```
+
+   Update `.env.local` with your values:
+   ```bash
+   MONGODB_URI=mongodb+srv://gemegold:gemegold@cluster0.eashhao.mongodb.net/efuyegela?retryWrites=true&w=majority&appName=Cluster0
+   JWT_SECRET=your-super-secret-jwt-key
+   ADMIN_EMAIL=gemechu
+   ADMIN_PASSWORD=daniel
+   ```
+
+4. **Initialize Database**
+   ```bash
+   node scripts/init-admins.js
+   ```
+
+5. **Start Development Server**
+   ```bash
+   npm run dev
+   ```
+
+6. **Access Application**
+   - Website: http://localhost:3000
+   - Admin: http://localhost:3000/admin
+
+## 🚀 Deployment
+
+### Vercel Deployment
+
+1. **Push to GitHub**
+   ```bash
+   git add .
+   git commit -m "Deploy to production"
+   git push origin main
+   ```
+
+2. **Deploy on Vercel**
+   - Go to [vercel.com](https://vercel.com)
+   - Import repository: `gemee-dev/efucustomerneedseo`
+   - Add environment variables (see VERCEL_ENV_VARIABLES.md)
+   - Deploy
+
+### Environment Variables for Production
+```bash
+MONGODB_URI=mongodb+srv://gemegold:gemegold@cluster0.eashhao.mongodb.net/efuyegela?retryWrites=true&w=majority&appName=Cluster0
+JWT_SECRET=efu-super-secret-jwt-key-2024-production-gemegold-efuyegela-secure-token-12345
+ADMIN_EMAIL=gemechu
+ADMIN_PASSWORD=daniel
+NEXT_PUBLIC_APP_URL=https://efucustomerneedseo.vercel.app
+```
+
+## 🚀 Performance Optimizations
 
 - **Next.js 14**: Latest framework with app router
 - **MongoDB Indexes**: Optimized database queries
@@ -67,3 +150,17 @@ A professional lead generation form application built with Next.js, featuring dy
 - **Code Splitting**: Automatic code splitting for faster loads
 - **Caching**: Efficient caching strategies
 - **Minification**: Production build optimization
+
+## 📞 Support
+
+For support or questions:
+- **Email**: gemechu@efuyegela.com
+- **GitHub Issues**: [Create an issue](https://github.com/gemee-dev/efucustomerneedseo/issues)
+
+## 📄 License
+
+This project is proprietary software developed for Efuyegela.
+
+---
+
+**Built with ❤️ by the Efuyegela Team**

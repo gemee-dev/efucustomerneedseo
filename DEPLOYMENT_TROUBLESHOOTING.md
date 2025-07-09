@@ -28,7 +28,7 @@ MONGODB_URI=mongodb+srv://gemegold:gemegold@cluster0.eashhao.mongodb.net/efuyege
 JWT_SECRET=efu-super-secret-jwt-key-2024-production-gemegold-efuyegela-secure-token-12345
 ADMIN_EMAIL=gemechu
 ADMIN_PASSWORD=daniel
-NEXT_PUBLIC_APP_URL=https://customerneedseo.vercel.app
+NEXT_PUBLIC_APP_URL=https://efucustomerneedseo.vercel.app
 SMTP_USER=
 SMTP_PASS=
 FROM_EMAIL=noreply@efuyegela.com
@@ -40,7 +40,7 @@ FROM_EMAIL=noreply@efuyegela.com
 2. **Import to Vercel**:
    - Go to vercel.com
    - Click "New Project"
-   - Import `Zemenaytech/customerneedseo`
+   - Import `gemee-dev/efucustomerneedseo`
 3. **Add Environment Variables** (copy from above)
 4. **Deploy**
 
