@@ -701,7 +701,12 @@ export default function HomePage() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-8">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
+          <h1 className="text-5xl font-bold text-blue-600 mb-4 leading-tight" style={{
+            background: 'linear-gradient(to right, #2563eb, #9333ea)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text'
+          }}>
             Efuyegela
           </h1>
           <p className="text-xl text-gray-600 mb-8">
@@ -988,24 +993,50 @@ export default function HomePage() {
           <AdZone position="inline" />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 border border-blue-100">
-            <h3 className="text-lg font-semibold text-blue-700 mb-2">Creative Ecosystem</h3>
-            <p className="text-gray-600 text-sm">Six specialized divisions supporting creators.</p>
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mt-12">
+          {/* Main Content */}
+          <div className="lg:col-span-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 border border-blue-100">
+                <h3 className="text-lg font-semibold text-blue-700 mb-2">Creative Ecosystem</h3>
+                <p className="text-gray-600 text-sm">Six specialized divisions supporting creators.</p>
+              </div>
+              <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 border border-purple-100">
+                <h3 className="text-lg font-semibold text-purple-700 mb-2">Software Development</h3>
+                <p className="text-gray-600 text-sm">Custom software solutions for your ideas.</p>
+              </div>
+              <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 border border-green-100">
+                <h3 className="text-lg font-semibold text-green-700 mb-2">Why Choose Efuyegela</h3>
+                <p className="text-gray-600 text-sm">Complete ecosystem and creator-focused solutions.</p>
+              </div>
+              <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 border border-orange-100">
+                <h3 className="text-lg font-semibold text-orange-700 mb-2">Expert Support</h3>
+                <p className="text-gray-600 text-sm">Professional guidance throughout your creative journey.</p>
+              </div>
+            </div>
           </div>
-          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 border border-purple-100">
-            <h3 className="text-lg font-semibold text-purple-700 mb-2">Software Development</h3>
-            <p className="text-gray-600 text-sm">Custom software solutions for your ideas.</p>
-          </div>
-          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 border border-green-100">
-            <h3 className="text-lg font-semibold text-green-700 mb-2">Why Choose Us</h3>
-            <p className="text-gray-600 text-sm">Complete ecosystem and creator-focused solutions.</p>
+
+          {/* Sidebar with Ads */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-8 space-y-6">
+              <AdZone position="sidebar" enableGoogleAds={true} />
+              <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-gray-200">
+                <h4 className="font-semibold text-gray-800 mb-2">Ready to Start?</h4>
+                <p className="text-sm text-gray-600 mb-3">Join the Efuyegela ecosystem today</p>
+                <button
+                  onClick={() => setShowForm(true)}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded text-sm transition-colors"
+                >
+                  Get Started
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Footer Advertisement */}
         <div className="mt-12">
-          <AdZone position="footer" />
+          <AdZone position="footer" enableGoogleAds={true} />
         </div>
       </div>
     </div>

@@ -1,11 +1,11 @@
-# Efuyegela Customer Need SEO - Lead Generation Form
+# Okoo - Lead Generation Form
 
 A professional lead generation form application built with Next.js, featuring dynamic service-specific questions, admin dashboard, and advertisement management system.
 
 ## 🚀 Live Demo
 
-- **Website**: [https://efucustomerneedseo.vercel.app](https://efucustomerneedseo.vercel.app)
-- **Admin Dashboard**: [https://efucustomerneedseo.vercel.app/admin](https://efucustomerneedseo.vercel.app/admin)
+- **Website**: [https://okoo.vercel.app](https://okoo.vercel.app)
+- **Admin Dashboard**: [https://okoo.vercel.app/admin](https://okoo.vercel.app/admin)
 
 ## 🔐 Admin Access
 
@@ -80,8 +80,8 @@ A professional lead generation form application built with Next.js, featuring dy
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/gemee-dev/efucustomerneedseo.git
-   cd efucustomerneedseo
+   git clone https://github.com/gemee-dev/okoo.git
+   cd okoo
    ```
 
 2. **Install dependencies**

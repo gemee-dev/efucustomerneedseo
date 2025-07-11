@@ -247,12 +247,17 @@ function AdminDashboard({ admin, onLogout }) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
       {/* Header */}
-      <div className="bg-white shadow">
+      <div className="bg-white/80 backdrop-blur-sm shadow-lg border-b border-blue-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
-            <h1 className="text-2xl font-bold text-gray-900">Efuyegela Admin Dashboard</h1>
+            <h1 className="text-2xl font-bold text-blue-600" style={{
+              background: 'linear-gradient(to right, #2563eb, #9333ea)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text'
+            }}>Efuyegela Admin Dashboard</h1>
             <div className="flex items-center space-x-4">
               <span className="text-gray-700">Welcome, {admin?.name}</span>
               <button
@@ -270,7 +275,8 @@ function AdminDashboard({ admin, onLogout }) {
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         {/* Tabs Navigation */}
         <div className="mb-8">
-          <div className="border-b border-gray-200">
+          <div className="bg-white/80 backdrop-blur-sm rounded-lg border border-blue-100 p-4">
+            <div className="border-b border-gray-200">
             <nav className="-mb-px flex space-x-8">
               <button
                 onClick={() => setActiveTab("submissions")}
@@ -293,12 +299,13 @@ function AdminDashboard({ admin, onLogout }) {
                 Advertisements
               </button>
             </nav>
+            </div>
           </div>
         </div>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white overflow-hidden shadow rounded-lg">
+          <div className="bg-white/80 backdrop-blur-sm overflow-hidden shadow-lg rounded-lg border border-blue-100">
             <div className="p-5">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
@@ -316,7 +323,7 @@ function AdminDashboard({ admin, onLogout }) {
             </div>
           </div>
 
-          <div className="bg-white overflow-hidden shadow rounded-lg">
+          <div className="bg-white/80 backdrop-blur-sm overflow-hidden shadow-lg rounded-lg border border-green-100">
             <div className="p-5">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
@@ -334,7 +341,7 @@ function AdminDashboard({ admin, onLogout }) {
             </div>
           </div>
 
-          <div className="bg-white overflow-hidden shadow rounded-lg">
+          <div className="bg-white/80 backdrop-blur-sm overflow-hidden shadow-lg rounded-lg border border-purple-100">
             <div className="p-5">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
@@ -352,7 +359,7 @@ function AdminDashboard({ admin, onLogout }) {
             </div>
           </div>
 
-          <div className="bg-white overflow-hidden shadow rounded-lg">
+          <div className="bg-white/80 backdrop-blur-sm overflow-hidden shadow-lg rounded-lg border border-orange-100">
             <div className="p-5">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
@@ -425,6 +432,26 @@ function AdminDashboard({ admin, onLogout }) {
                             </p>
                           </div>
                         )}
+                        {/* File count indicator */}
+                        {(() => {
+                          let fileCount = 0
+                          try {
+                            const files = submission.files ? JSON.parse(submission.files) : []
+                            fileCount = files.length
+                          } catch (e) {
+                            fileCount = 0
+                          }
+                          return fileCount > 0 ? (
+                            <div className="mt-2 flex items-center">
+                              <svg className="h-4 w-4 text-blue-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
+                              </svg>
+                              <span className="text-xs text-blue-600 font-medium">
+                                {fileCount} file{fileCount !== 1 ? 's' : ''} attached
+                              </span>
+                            </div>
+                          ) : null
+                        })()}
                       </div>
                       <div className="ml-4 flex-shrink-0">
                         <button
@@ -689,17 +716,26 @@ function AdminDashboard({ admin, onLogout }) {
                                   href={file.url}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm"
+                                  className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm transition-colors"
                                 >
                                   View
                                 </a>
                                 <a
                                   href={file.url}
                                   download={file.name}
-                                  className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm"
+                                  className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm transition-colors"
                                 >
                                   Download
                                 </a>
+                                <button
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(window.location.origin + file.url)
+                                    alert('File URL copied to clipboard!')
+                                  }}
+                                  className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm transition-colors"
+                                >
+                                  Copy URL
+                                </button>
                               </div>
                             </div>
                           ))}
