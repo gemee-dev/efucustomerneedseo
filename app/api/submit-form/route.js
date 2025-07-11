@@ -65,6 +65,19 @@ export async function POST(request) {
       phone: formData.phone
     })
 
+    // Process and validate files
+    let processedFiles = []
+    if (formData.files && Array.isArray(formData.files)) {
+      processedFiles = formData.files.map(file => ({
+        name: file.name || 'Unknown file',
+        url: file.url || '',
+        size: file.size || 0,
+        type: file.type || 'unknown',
+        uploadedAt: file.uploadedAt || new Date().toISOString()
+      }))
+      console.log(`📎 Processing ${processedFiles.length} files for submission`)
+    }
+
     // Prepare submission data
     const submissionData = {
       user_id: user.id,
@@ -77,12 +90,17 @@ export async function POST(request) {
       description: formData.description || null,
       phone: formData.phone || null,
       website: formData.website || null,
-      files: JSON.stringify(formData.files || []),
-      // Add all dynamic form fields
-      ...formData, // Include all form fields
+      files: JSON.stringify(processedFiles), // Ensure files are properly stringified
+      // Add all dynamic form fields (but exclude files to avoid duplication)
+      ...Object.fromEntries(
+        Object.entries(formData).filter(([key]) =>
+          !['files', 'submittedAt'].includes(key)
+        )
+      ),
       ip_address: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || null,
       user_agent: request.headers.get('user-agent') || null,
-      submitted_at: formData.submittedAt || new Date().toISOString()
+      submitted_at: formData.submittedAt || new Date().toISOString(),
+      status: 'received' // Ensure status is set
     }
 
     console.log('💾 Saving submission data...')

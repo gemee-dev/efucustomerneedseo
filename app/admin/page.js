@@ -34,7 +34,20 @@ function AdminDashboard({ admin, onLogout }) {
       })
       if (response.ok) {
         const data = await response.json()
+        console.log(`✅ Fetched ${data.data?.length || 0} submissions`)
         setSubmissions(data.data || [])
+
+        // Log file information for debugging
+        data.data?.forEach((submission, index) => {
+          try {
+            const files = submission.files ? JSON.parse(submission.files) : []
+            if (files.length > 0) {
+              console.log(`📎 Submission ${index + 1} (${submission.name}) has ${files.length} files:`, files.map(f => f.name))
+            }
+          } catch (e) {
+            console.log(`⚠️ Could not parse files for submission ${index + 1}`)
+          }
+        })
       } else if (response.status === 401) {
         // Token expired or invalid, use fallback data
         setSubmissions([
@@ -85,10 +98,19 @@ function AdminDashboard({ admin, onLogout }) {
 
   const fetchAdvertisements = async () => {
     try {
+      console.log('📢 Fetching advertisements for admin dashboard...')
       const response = await fetch('/api/advertisements')
       if (response.ok) {
         const data = await response.json()
+        console.log(`✅ Fetched ${data.data?.length || 0} advertisements`)
         setAdvertisements(data.data || [])
+
+        // Log advertisement details for debugging
+        data.data?.forEach((ad, index) => {
+          console.log(`📢 Ad ${index + 1}: "${ad.title}" (${ad.position}) - Status: ${ad.status}`)
+        })
+      } else {
+        console.error('Failed to fetch advertisements:', response.status)
       }
     } catch (error) {
       console.error('Failed to fetch advertisements:', error)
