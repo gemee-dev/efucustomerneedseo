@@ -454,25 +454,43 @@ function AdminDashboard({ admin, onLogout }) {
                             </p>
                           </div>
                         )}
-                        {/* File count indicator */}
+                        {/* File count indicator with debugging */}
                         {(() => {
                           let fileCount = 0
+                          let debugInfo = ''
                           try {
-                            const files = submission.files ? JSON.parse(submission.files) : []
-                            fileCount = files.length
+                            if (submission.files) {
+                              const files = JSON.parse(submission.files)
+                              fileCount = files.length
+                              debugInfo = `Parsed ${fileCount} files`
+                              console.log(`📎 Submission ${submission.id || submission._id} files:`, files)
+                            } else {
+                              debugInfo = 'No files field'
+                              console.log(`📎 Submission ${submission.id || submission._id} has no files field`)
+                            }
                           } catch (e) {
-                            fileCount = 0
+                            debugInfo = `Parse error: ${e.message}`
+                            console.log(`❌ File parse error for submission ${submission.id || submission._id}:`, e.message, 'Raw files:', submission.files)
                           }
-                          return fileCount > 0 ? (
-                            <div className="mt-2 flex items-center">
-                              <svg className="h-4 w-4 text-blue-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
-                              </svg>
-                              <span className="text-xs text-blue-600 font-medium">
-                                {fileCount} file{fileCount !== 1 ? 's' : ''} attached
-                              </span>
+
+                          return (
+                            <div className="mt-2">
+                              {fileCount > 0 ? (
+                                <div className="flex items-center">
+                                  <svg className="h-4 w-4 text-blue-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
+                                  </svg>
+                                  <span className="text-xs text-blue-600 font-medium">
+                                    {fileCount} file{fileCount !== 1 ? 's' : ''} attached
+                                  </span>
+                                </div>
+                              ) : (
+                                <div className="text-xs text-gray-400">
+                                  No files ({debugInfo})
+                                </div>
+                              )}
                             </div>
-                          ) : null
+                          )
                         })()}
                       </div>
                       <div className="ml-4 flex-shrink-0">
@@ -707,18 +725,49 @@ function AdminDashboard({ admin, onLogout }) {
                   </div>
                 )}
 
-                {/* Project Files */}
+                {/* Project Files with Enhanced Debugging */}
                 {(() => {
                   let files = []
+                  let debugInfo = ''
+                  let parseError = null
+
                   try {
-                    files = selectedSubmission.files ? JSON.parse(selectedSubmission.files) : []
+                    if (selectedSubmission.files) {
+                      console.log('📎 Raw files data for modal:', selectedSubmission.files)
+                      files = JSON.parse(selectedSubmission.files)
+                      debugInfo = `Successfully parsed ${files.length} files`
+                      console.log('📎 Parsed files for modal:', files)
+                    } else {
+                      debugInfo = 'No files field in submission'
+                      console.log('📎 No files field in submission:', selectedSubmission)
+                    }
                   } catch (e) {
-                    files = []
+                    parseError = e.message
+                    debugInfo = `Parse error: ${e.message}`
+                    console.log('❌ File parse error in modal:', e.message, 'Raw data:', selectedSubmission.files)
                   }
-                  return files.length > 0 ? (
+
+                  return (
                     <div>
-                      <h4 className="text-md font-semibold text-gray-900 mb-3">Project Files</h4>
-                      <div className="bg-gray-50 rounded-lg p-4">
+                      <h4 className="text-md font-semibold text-gray-900 mb-3">
+                        Project Files
+                        <span className="text-sm font-normal text-gray-500 ml-2">
+                          ({files.length} files - {debugInfo})
+                        </span>
+                      </h4>
+
+                      {parseError && (
+                        <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+                          <p className="text-sm text-red-600">
+                            <strong>File Parse Error:</strong> {parseError}
+                          </p>
+                          <p className="text-xs text-red-500 mt-1">
+                            Raw data: {selectedSubmission.files ? selectedSubmission.files.substring(0, 100) + '...' : 'null'}
+                          </p>
+                        </div>
+                      )}
+
+                        <div className="bg-gray-50 rounded-lg p-4">
                         <div className="space-y-3">
                           {files.map((file, index) => (
                             <div key={index} className="flex items-center justify-between bg-white p-3 rounded border">
@@ -763,8 +812,13 @@ function AdminDashboard({ admin, onLogout }) {
                           ))}
                         </div>
                       </div>
+                      ) : (
+                        <div className="bg-gray-50 rounded-lg p-4">
+                          <p className="text-sm text-gray-500">No files uploaded</p>
+                        </div>
+                      )}
                     </div>
-                  ) : null
+                  )
                 })()}
 
                 {/* Status and Actions */}
