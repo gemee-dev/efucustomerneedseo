@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { connectToMongoose } from "@/lib/mongodb"
+import { Admin } from "@/lib/models/Admin"
 
 export async function GET() {
   try {
@@ -28,8 +29,22 @@ export async function GET() {
       }
     } catch (error) {
       healthCheck.checks.mongodb = {
+        status: 'warning',
+        message: 'MongoDB not available, using in-memory storage'
+      }
+    }
+
+    // Check Admin system
+    try {
+      const testAdmin = await Admin.findByEmail('gbonsa2@gmail.com')
+      healthCheck.checks.adminSystem = {
+        status: testAdmin ? 'working' : 'not found',
+        message: testAdmin ? 'Admin system operational' : 'Admin not found'
+      }
+    } catch (error) {
+      healthCheck.checks.adminSystem = {
         status: 'error',
-        message: error.message
+        message: `Admin system error: ${error.message}`
       }
     }
 

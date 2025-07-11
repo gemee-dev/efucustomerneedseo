@@ -6,33 +6,47 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-producti
 
 export async function POST(request) {
   try {
+    console.log('🔐 Admin login attempt started')
+
     const { email, password } = await request.json()
+    console.log(`📧 Login attempt for email: ${email}`)
 
     // Validation
     if (!email || !password) {
-      return NextResponse.json({ 
-        error: "Email and password are required" 
+      console.log('❌ Missing email or password')
+      return NextResponse.json({
+        error: "Email and password are required"
       }, { status: 400 })
     }
 
     // Authenticate admin
+    console.log('🔍 Starting authentication...')
     const admin = await Admin.authenticate(email, password)
-    
+
     if (!admin) {
-      return NextResponse.json({ 
-        error: "Invalid email or password" 
+      console.log('❌ Authentication failed')
+      return NextResponse.json({
+        error: "Invalid email or password"
       }, { status: 401 })
     }
 
-    // Update last login
-    await Admin.updateLastLogin(admin.id)
+    console.log('✅ Authentication successful, updating last login...')
+
+    // Update last login (don't fail if this fails)
+    try {
+      await Admin.updateLastLogin(admin.id || admin._id)
+    } catch (updateError) {
+      console.log('⚠️ Failed to update last login:', updateError.message)
+    }
+
+    console.log('🔑 Generating JWT token...')
 
     // Generate JWT token
     const token = jwt.sign(
-      { 
-        adminId: admin.id, 
-        email: admin.email, 
-        role: admin.role 
+      {
+        adminId: admin.id || admin._id,
+        email: admin.email,
+        role: admin.role
       },
       JWT_SECRET,
       { expiresIn: '24h' }
@@ -42,7 +56,7 @@ export async function POST(request) {
     const response = NextResponse.json({
       success: true,
       admin: {
-        id: admin.id,
+        id: admin.id || admin._id,
         email: admin.email,
         name: admin.name,
         role: admin.role
@@ -62,9 +76,15 @@ export async function POST(request) {
     return response
 
   } catch (error) {
-    console.error("Admin login error:", error)
-    return NextResponse.json({ 
-      error: "Internal server error" 
+    console.error("❌ Admin login error details:", {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    })
+
+    return NextResponse.json({
+      error: "Internal server error",
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
     }, { status: 500 })
   }
 }
