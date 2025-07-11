@@ -10,20 +10,23 @@ import { Star, Users, Clock, ArrowRight, Phone, Mail, Globe } from "lucide-react
 function GoogleAdsSlot({ slot, format = "auto", style = {} }) {
   useEffect(() => {
     try {
-      if (typeof window !== 'undefined' && window.adsbygoogle) {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      if (typeof window !== 'undefined') {
+        // Initialize adsbygoogle array if it doesn't exist
+        window.adsbygoogle = window.adsbygoogle || [];
+        // Push the ad configuration
+        window.adsbygoogle.push({});
       }
     } catch (error) {
       console.error('Google Ads error:', error);
     }
-  }, []);
+  }, [slot]);
 
   return (
     <div className="google-ads-container" style={style}>
       <ins
         className="adsbygoogle"
-        style={{ display: 'block', ...style }}
-        data-ad-client="ca-pub-YOUR_PUBLISHER_ID" // Replace with your Google AdSense publisher ID
+        style={{ display: 'block', width: '100%', ...style }}
+        data-ad-client="ca-pub-1234567890123456" // Replace with your actual Google AdSense publisher ID
         data-ad-slot={slot}
         data-ad-format={format}
         data-full-width-responsive="true"
@@ -82,59 +85,56 @@ export function AdZone({ position, enableGoogleAds = true }) {
     switch (position) {
       case "sidebar":
         return (
-          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 border border-blue-100">
-            <div className="flex items-center space-x-2 mb-4">
-              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                <Globe className="w-4 h-4 text-white" />
-              </div>
-              <div>
-                <h3 className="text-sm font-semibold text-blue-700">Sponsored</h3>
-                <p className="text-xs text-blue-600">Advertisement</p>
-              </div>
+          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-blue-100">
+            <div className="text-center mb-2">
+              <span className="text-xs text-blue-600 uppercase tracking-wide font-medium">Advertisement</span>
             </div>
             <GoogleAdsSlot
-              slot="SIDEBAR_AD_SLOT_ID"
+              slot="1234567890"
               format="rectangle"
-              style={{ minHeight: '250px' }}
+              style={{ minHeight: '250px', width: '100%' }}
             />
           </div>
         )
 
       case "inline":
         return (
-          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 border border-purple-100">
-            <div className="text-center mb-4">
+          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-purple-100">
+            <div className="text-center mb-2">
               <span className="text-xs text-purple-600 uppercase tracking-wide font-medium">Advertisement</span>
             </div>
             <GoogleAdsSlot
-              slot="INLINE_AD_SLOT_ID"
-              format="fluid"
-              style={{ minHeight: '120px' }}
+              slot="1234567891"
+              format="auto"
+              style={{ minHeight: '120px', width: '100%' }}
             />
           </div>
         )
 
       case "footer":
         return (
-          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 border border-gray-200">
-            <div className="text-center mb-4">
+          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-gray-200">
+            <div className="text-center mb-2">
               <span className="text-xs text-gray-600 uppercase tracking-wide font-medium">Advertisement</span>
             </div>
             <GoogleAdsSlot
-              slot="FOOTER_AD_SLOT_ID"
+              slot="1234567892"
               format="horizontal"
-              style={{ minHeight: '90px' }}
+              style={{ minHeight: '90px', width: '100%' }}
             />
           </div>
         )
 
       default:
         return (
-          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 border border-gray-200">
+          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-gray-200">
+            <div className="text-center mb-2">
+              <span className="text-xs text-gray-600 uppercase tracking-wide font-medium">Advertisement</span>
+            </div>
             <GoogleAdsSlot
-              slot="DEFAULT_AD_SLOT_ID"
+              slot="1234567893"
               format="auto"
-              style={{ minHeight: '100px' }}
+              style={{ minHeight: '100px', width: '100%' }}
             />
           </div>
         )
@@ -290,16 +290,16 @@ export function AdZone({ position, enableGoogleAds = true }) {
   // Render mixed ads (custom + Google Ads) for better monetization
   const renderMixedAds = () => {
     const hasCustomAds = advertisements.length > 0
-    const shouldShowGoogle = showGoogleAds && (position === 'sidebar' || position === 'inline')
+    const shouldShowGoogle = showGoogleAds
 
-    if (hasCustomAds && shouldShowGoogle) {
-      // Show both custom and Google ads in rotation
+    // Always prioritize Google Ads when enabled
+    if (shouldShowGoogle) {
       return (
         <div className="space-y-4">
-          {getAdContent()}
-          {Math.random() > 0.6 && ( // 40% chance to show Google ad alongside custom ad
+          {getGoogleAdContent()}
+          {hasCustomAds && Math.random() > 0.7 && ( // 30% chance to show custom ad alongside Google ad
             <div className="border-t pt-4">
-              {getGoogleAdContent()}
+              {getAdContent()}
             </div>
           )}
         </div>
