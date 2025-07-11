@@ -26,7 +26,7 @@ function GoogleAdsSlot({ slot, format = "auto", style = {} }) {
       <ins
         className="adsbygoogle"
         style={{ display: 'block', width: '100%', ...style }}
-        data-ad-client="ca-pub-1234567890123456" // Replace with your actual Google AdSense publisher ID
+        data-ad-client="ca-pub-9080129920569347"
         data-ad-slot={slot}
         data-ad-format={format}
         data-full-width-responsive="true"

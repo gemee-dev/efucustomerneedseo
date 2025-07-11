@@ -19,13 +19,19 @@ Once approved:
 
 ### Step 3: Create Ad Units
 
-Create these ad units in your AdSense dashboard:
+✅ **Your Publisher ID is already configured!**
 
-1. **Sidebar Ad** (300x250 rectangle)
+Now create these ad units in your AdSense dashboard:
+
+1. **Sidebar Ad** (300x250 rectangle or responsive)
 2. **Inline Ad** (responsive/auto)
-3. **Footer Ad** (728x90 leaderboard)
+3. **Footer Ad** (728x90 leaderboard or responsive)
 
-Copy the **Ad Unit IDs** for each.
+**To create ad units:**
+1. Go to your [AdSense dashboard](https://www.google.com/adsense/)
+2. Click "Ads" → "By ad unit" → "Create new ad unit"
+3. Choose "Display ads" for each position
+4. Copy the **Ad Unit IDs** (format: 1234567890)
 
 ### Step 4: Update the Code
 
@@ -54,14 +60,13 @@ case "footer": slot="YOUR_FOOTER_AD_SLOT_ID"
 2. **Wait 24-48 hours** for ads to start showing
 3. **Check AdSense dashboard** for performance
 
-## 📋 Current Placeholder Values
+## 📋 Current Configuration
 
-These need to be replaced with your real values:
-
-- **Publisher ID**: `ca-pub-1234567890123456`
-- **Sidebar Slot**: `1234567890`
-- **Inline Slot**: `1234567891`
-- **Footer Slot**: `1234567892`
+✅ **Publisher ID**: `ca-pub-9080129920569347` (CONFIGURED)
+⚠️ **Ad Slot IDs** (Need to be created in your AdSense dashboard):
+- **Sidebar Slot**: `1234567890` (Replace with real slot ID)
+- **Inline Slot**: `1234567891` (Replace with real slot ID)
+- **Footer Slot**: `1234567892` (Replace with real slot ID)
 
 ## 🎯 Ad Positions
 
