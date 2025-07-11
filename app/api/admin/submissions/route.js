@@ -49,6 +49,8 @@ export async function GET(request) {
 
     let submissions
 
+    console.log('📊 Fetching submissions for admin dashboard...')
+
     try {
       if (status) {
         submissions = await Submission.getByStatus(status, limit)
@@ -57,6 +59,8 @@ export async function GET(request) {
       } else {
         submissions = await Submission.getAll(limit, offset)
       }
+
+      console.log(`✅ Retrieved ${submissions.length} submissions from database/memory`)
     } catch (error) {
       // Fallback data when database is not available
       console.log('⚠️ Database not available, using mock submissions data')

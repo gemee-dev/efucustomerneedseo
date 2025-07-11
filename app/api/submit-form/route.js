@@ -5,13 +5,21 @@ import nodemailer from "nodemailer"
 
 export async function POST(request) {
   try {
+    console.log('📝 Form submission started')
     const formData = await request.json()
+    console.log('📋 Form data received:', {
+      name: formData.name,
+      email: formData.email,
+      service: formData.service,
+      hasFiles: formData.files ? formData.files.length : 0
+    })
 
     // Enhanced validation
     const requiredFields = ['name', 'email', 'service']
     const missingFields = requiredFields.filter(field => !formData[field])
 
     if (missingFields.length > 0) {
+      console.log('❌ Validation failed - missing fields:', missingFields)
       return NextResponse.json({
         error: `Missing required fields: ${missingFields.join(', ')}`
       }, { status: 400 })
@@ -70,13 +78,23 @@ export async function POST(request) {
       phone: formData.phone || null,
       website: formData.website || null,
       files: JSON.stringify(formData.files || []),
+      // Add all dynamic form fields
+      ...formData, // Include all form fields
       ip_address: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || null,
       user_agent: request.headers.get('user-agent') || null,
       submitted_at: formData.submittedAt || new Date().toISOString()
     }
 
+    console.log('💾 Saving submission data...')
+
     // Save to database
     const submission = await Submission.create(submissionData)
+
+    console.log('✅ Submission saved successfully:', {
+      id: submission.id || submission._id,
+      email: submission.email,
+      service: submission.service
+    })
 
     // Send notifications (async, don't wait)
     Promise.all([
