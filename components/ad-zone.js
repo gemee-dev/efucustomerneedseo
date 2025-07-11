@@ -163,122 +163,27 @@ export function AdZone({ position, enableGoogleAds = true }) {
     const currentAdvertisement = advertisements[currentAd] || advertisements[0]
 
     switch (position) {
-      case "header":
-        return (
-          <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-4 text-center">
-            <p className="text-sm font-medium">{currentAdvertisement.content}</p>
-          </div>
-        )
-
       case "sidebar":
-        // Enhanced sidebar ads with fallback design
-        const sidebarAdData = {
-          title: currentAdvertisement.title,
-          description: currentAdvertisement.content,
-          price: "Contact for Quote",
-          rating: "4.9",
-          reviews: "150+",
-          icon: Globe,
-          color: "from-blue-500 to-cyan-500"
-        }
-
-        // Rotate colors based on current ad index
-        const colors = [
-          "from-blue-500 to-cyan-500",
-          "from-purple-500 to-pink-500",
-          "from-green-500 to-emerald-500",
-          "from-orange-500 to-red-500",
-          "from-indigo-500 to-purple-500"
-        ]
-        sidebarAdData.color = colors[currentAd % colors.length]
-
-        // Rotate icons
-        const icons = [Globe, Phone, Mail, Star, ArrowRight]
-        sidebarAdData.icon = icons[currentAd % icons.length]
-
-        const ad = sidebarAdData
-        const IconComponent = ad.icon
-
         return (
-          <div className="bg-white/80 backdrop-blur-sm rounded-lg border border-blue-100 overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-            <div className={`bg-gradient-to-r ${ad.color} p-4 text-white`}>
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-white/20 rounded-lg">
-                  <IconComponent className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-lg">{ad.title}</h3>
-                  <div className="flex items-center gap-2 text-sm">
-                    <Star className="w-4 h-4 fill-current" />
-                    <span>{ad.rating}</span>
-                    <span>({ad.reviews} reviews)</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="p-4">
-              <p className="text-gray-600 mb-3 text-sm leading-relaxed">
-                {ad.description}
-              </p>
-              <div className="flex items-center justify-between mb-4">
-                <Badge variant="secondary" className="text-green-700 bg-green-100">
-                  {ad.price}
-                </Badge>
-                <div className="flex items-center gap-1 text-xs text-gray-500">
-                  <Clock className="w-3 h-3" />
-                  <span>2-4 weeks</span>
-                </div>
-              </div>
-              <Button className="w-full group">
-                Get Quote
-                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </div>
+          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-blue-100">
+            <h3 className="text-lg font-semibold text-blue-700 mb-2">{currentAdvertisement.title}</h3>
+            <p className="text-gray-600 text-sm">{currentAdvertisement.content}</p>
           </div>
         )
 
       case "inline":
         return (
-          <div className="bg-white/80 backdrop-blur-sm rounded-lg border border-purple-100">
-            <div className="p-8 text-center">
-              <div className="mx-auto w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mb-6">
-                <Star className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-2xl font-semibold text-purple-700 mb-4">{currentAdvertisement.title}</h3>
-              <p className="text-lg text-gray-600 mb-6">
-                {currentAdvertisement.content}
-              </p>
-              <div className="grid grid-cols-3 gap-4 mb-6">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-600">500+</div>
-                  <div className="text-sm text-gray-600">Projects</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-green-600">4.9</div>
-                  <div className="text-sm text-gray-600">Rating</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-purple-600">24h</div>
-                  <div className="text-sm text-gray-600">Response</div>
-                </div>
-              </div>
-              <Button size="lg" className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-3 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 group">
-                View Our Work
-                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </div>
+          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-purple-100">
+            <h3 className="text-lg font-semibold text-purple-700 mb-2">{currentAdvertisement.title}</h3>
+            <p className="text-gray-600 text-sm">{currentAdvertisement.content}</p>
           </div>
         )
 
       case "footer":
         return (
-          <div className="bg-white/80 backdrop-blur-sm rounded-lg border border-gray-200 p-6 text-center">
+          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-gray-200">
             <h3 className="text-lg font-semibold text-gray-800 mb-2">{currentAdvertisement.title}</h3>
-            <p className="text-gray-600 mb-4">{currentAdvertisement.content}</p>
-            <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
-              Learn More
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
+            <p className="text-gray-600 text-sm">{currentAdvertisement.content}</p>
           </div>
         )
 
@@ -287,25 +192,16 @@ export function AdZone({ position, enableGoogleAds = true }) {
     }
   }
 
-  // Render mixed ads (custom + Google Ads) for better monetization
+  // Render ads - prioritize Google Ads completely
   const renderMixedAds = () => {
-    const hasCustomAds = advertisements.length > 0
     const shouldShowGoogle = showGoogleAds
 
-    // Always prioritize Google Ads when enabled
+    // Always show Google Ads when enabled (no portfolio content)
     if (shouldShowGoogle) {
-      return (
-        <div className="space-y-4">
-          {getGoogleAdContent()}
-          {hasCustomAds && Math.random() > 0.7 && ( // 30% chance to show custom ad alongside Google ad
-            <div className="border-t pt-4">
-              {getAdContent()}
-            </div>
-          )}
-        </div>
-      )
+      return getGoogleAdContent()
     }
 
+    // Only show custom admin ads if Google Ads are disabled
     return getAdContent()
   }
 
