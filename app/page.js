@@ -593,11 +593,21 @@ export default function HomePage() {
   const handleFileUpload = async (files) => {
     setUploadLoading(true)
     const uploadedFileData = []
+    let hasErrors = false
 
     for (const file of files) {
       try {
+        // Validate file size on frontend first
+        if (file.size > 5 * 1024 * 1024) {
+          alert(`File "${file.name}" is too large (${Math.round(file.size / 1024 / 1024)}MB). Maximum 5MB allowed.`)
+          hasErrors = true
+          continue
+        }
+
         const formData = new FormData()
         formData.append('file', file)
+
+        console.log(`📤 Uploading file: ${file.name} (${Math.round(file.size / 1024)}KB)`)
 
         const response = await fetch('/api/upload', {
           method: 'POST',
@@ -615,16 +625,26 @@ export default function HomePage() {
             uploadedAt: result.uploadedAt || new Date().toISOString()
           })
         } else {
-          const errorResult = await response.json()
+          const errorResult = await response.json().catch(() => ({ error: 'Unknown error' }))
           console.error('❌ File upload failed:', errorResult)
-          alert(`Failed to upload ${file.name}: ${errorResult.error}`)
+          alert(`Failed to upload "${file.name}": ${errorResult.error || 'Server error'}`)
+          hasErrors = true
         }
       } catch (error) {
         console.error('File upload error:', error)
+        alert(`Error uploading "${file.name}": ${error.message}`)
+        hasErrors = true
       }
     }
 
-    setUploadedFiles(prev => [...prev, ...uploadedFileData])
+    if (uploadedFileData.length > 0) {
+      setUploadedFiles(prev => [...prev, ...uploadedFileData])
+    }
+
+    if (!hasErrors && uploadedFileData.length > 0) {
+      alert(`Successfully uploaded ${uploadedFileData.length} file(s)`)
+    }
+
     setUploadLoading(false)
   }
 
@@ -913,7 +933,7 @@ export default function HomePage() {
                   {/* File Upload Section */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Project Files</label>
-                    <p className="text-xs text-gray-500 mb-2">Upload any relevant documents, images, or files related to your project</p>
+                    <p className="text-xs text-gray-500 mb-2">Upload any relevant documents, images, or files related to your project (Max 5MB each)</p>
 
                     <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors">
                       <input
@@ -932,7 +952,7 @@ export default function HomePage() {
                           <p className="mt-2 text-sm">
                             <span className="font-medium text-blue-600 hover:text-blue-500">Click to upload files</span> or drag and drop
                           </p>
-                          <p className="text-xs text-gray-500">PDF, DOC, Images, ZIP up to 10MB each</p>
+                          <p className="text-xs text-gray-500">PDF, DOC, Images, ZIP up to 5MB each</p>
                         </div>
                       </label>
                     </div>
