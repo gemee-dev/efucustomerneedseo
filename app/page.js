@@ -606,13 +606,18 @@ export default function HomePage() {
 
         if (response.ok) {
           const result = await response.json()
+          console.log('✅ File upload successful:', result)
           uploadedFileData.push({
-            name: file.name,
-            size: file.size,
-            type: file.type,
+            name: result.originalName || file.name,
+            size: result.size || file.size,
+            type: result.type || file.type,
             url: result.url,
-            uploadedAt: new Date().toISOString()
+            uploadedAt: result.uploadedAt || new Date().toISOString()
           })
+        } else {
+          const errorResult = await response.json()
+          console.error('❌ File upload failed:', errorResult)
+          alert(`Failed to upload ${file.name}: ${errorResult.error}`)
         }
       } catch (error) {
         console.error('File upload error:', error)
