@@ -698,7 +698,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-4 sm:p-8">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold text-blue-600 mb-4 leading-tight" style={{
@@ -988,14 +988,14 @@ export default function HomePage() {
           </div>
         )}
 
-        {/* Advertisement Space */}
-        <div className="mt-12">
-          <AdZone position="inline" />
+        {/* Advertisement Space - Mobile Optimized */}
+        <div className="mt-8 sm:mt-12 w-full overflow-hidden">
+          <AdZone position="inline" enableGoogleAds={true} />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mt-12">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6 mt-8 sm:mt-12">
           {/* Main Content */}
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-3 order-2 lg:order-1">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 border border-blue-100">
                 <h3 className="text-lg font-semibold text-blue-700 mb-2">Creative Ecosystem</h3>
@@ -1016,10 +1016,12 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Sidebar with Ads */}
-          <div className="lg:col-span-1">
-            <div className="sticky top-8 space-y-6">
-              <AdZone position="sidebar" enableGoogleAds={true} />
+          {/* Sidebar with Ads - Mobile Optimized */}
+          <div className="lg:col-span-1 order-1 lg:order-2">
+            <div className="lg:sticky lg:top-8 space-y-4 sm:space-y-6">
+              <div className="w-full max-w-sm mx-auto lg:max-w-none">
+                <AdZone position="sidebar" enableGoogleAds={true} />
+              </div>
               <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-gray-200">
                 <h4 className="font-semibold text-gray-800 mb-2">Ready to Start?</h4>
                 <p className="text-sm text-gray-600 mb-3">Join the Efuyegela ecosystem today</p>
@@ -1034,8 +1036,8 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Footer Advertisement */}
-        <div className="mt-12">
+        {/* Footer Advertisement - Mobile Optimized */}
+        <div className="mt-8 sm:mt-12 w-full overflow-hidden">
           <AdZone position="footer" enableGoogleAds={true} />
         </div>
       </div>

@@ -56,6 +56,27 @@ export default function RootLayout({ children }) {
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9080129920569347"
           crossOrigin="anonymous"
         />
+        {/* Mobile Ad Optimization CSS */}
+        <style>{`
+          .google-ads-container {
+            max-width: 100%;
+            overflow: hidden;
+          }
+          .adsbygoogle {
+            max-width: 100% !important;
+            overflow: hidden !important;
+          }
+          @media (max-width: 768px) {
+            .google-ads-container {
+              max-width: 100vw;
+              margin: 0 auto;
+            }
+            .adsbygoogle {
+              max-width: 100vw !important;
+              width: 100% !important;
+            }
+          }
+        `}</style>
       </head>
       <body className={inter.className}>
         <AuthProvider>{children}</AuthProvider>

@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Star, Users, Clock, ArrowRight, Phone, Mail, Globe } from "lucide-react"
 
-// Google Ads Component
+// Google Ads Component - Mobile Optimized
 function GoogleAdsSlot({ slot, format = "auto", style = {} }) {
   useEffect(() => {
     try {
@@ -22,10 +22,16 @@ function GoogleAdsSlot({ slot, format = "auto", style = {} }) {
   }, [slot]);
 
   return (
-    <div className="google-ads-container" style={style}>
+    <div className="google-ads-container w-full overflow-hidden" style={style}>
       <ins
         className="adsbygoogle"
-        style={{ display: 'block', width: '100%', ...style }}
+        style={{
+          display: 'block',
+          width: '100%',
+          maxWidth: '100%',
+          overflow: 'hidden',
+          ...style
+        }}
         data-ad-client="ca-pub-9080129920569347"
         data-ad-slot={slot}
         data-ad-format={format}
@@ -80,62 +86,87 @@ export function AdZone({ position, enableGoogleAds = true }) {
     }
   }, [advertisements.length])
 
-  // Google Ads content that matches Efuyegela page style
+  // Google Ads content optimized for mobile devices
   const getGoogleAdContent = () => {
     switch (position) {
       case "sidebar":
         return (
-          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-blue-100">
+          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-3 border border-blue-100 max-w-full overflow-hidden">
             <div className="text-center mb-2">
               <span className="text-xs text-blue-600 uppercase tracking-wide font-medium">Advertisement</span>
             </div>
-            <GoogleAdsSlot
-              slot="1234567890"
-              format="rectangle"
-              style={{ minHeight: '250px', width: '100%' }}
-            />
+            <div className="w-full max-w-sm mx-auto">
+              <GoogleAdsSlot
+                slot="1234567890"
+                format="auto"
+                style={{
+                  minHeight: '200px',
+                  maxHeight: '300px',
+                  width: '100%',
+                  maxWidth: '320px'
+                }}
+              />
+            </div>
           </div>
         )
 
       case "inline":
         return (
-          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-purple-100">
+          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-3 border border-purple-100 w-full">
             <div className="text-center mb-2">
               <span className="text-xs text-purple-600 uppercase tracking-wide font-medium">Advertisement</span>
             </div>
-            <GoogleAdsSlot
-              slot="1234567891"
-              format="auto"
-              style={{ minHeight: '120px', width: '100%' }}
-            />
+            <div className="w-full">
+              <GoogleAdsSlot
+                slot="1234567891"
+                format="fluid"
+                style={{
+                  minHeight: '100px',
+                  maxHeight: '200px',
+                  width: '100%'
+                }}
+              />
+            </div>
           </div>
         )
 
       case "footer":
         return (
-          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-gray-200">
+          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-3 border border-gray-200 w-full">
             <div className="text-center mb-2">
               <span className="text-xs text-gray-600 uppercase tracking-wide font-medium">Advertisement</span>
             </div>
-            <GoogleAdsSlot
-              slot="1234567892"
-              format="horizontal"
-              style={{ minHeight: '90px', width: '100%' }}
-            />
+            <div className="w-full">
+              <GoogleAdsSlot
+                slot="1234567892"
+                format="auto"
+                style={{
+                  minHeight: '80px',
+                  maxHeight: '120px',
+                  width: '100%'
+                }}
+              />
+            </div>
           </div>
         )
 
       default:
         return (
-          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-gray-200">
+          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-3 border border-gray-200 w-full">
             <div className="text-center mb-2">
               <span className="text-xs text-gray-600 uppercase tracking-wide font-medium">Advertisement</span>
             </div>
-            <GoogleAdsSlot
-              slot="1234567893"
-              format="auto"
-              style={{ minHeight: '100px', width: '100%' }}
-            />
+            <div className="w-full">
+              <GoogleAdsSlot
+                slot="1234567893"
+                format="auto"
+                style={{
+                  minHeight: '100px',
+                  maxHeight: '150px',
+                  width: '100%'
+                }}
+              />
+            </div>
           </div>
         )
     }
