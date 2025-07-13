@@ -719,6 +719,11 @@ export default function HomePage() {
           >
             Start Project
           </button>
+
+          {/* Google Ad - Horizontal below Start Project button */}
+          <div className="mt-6 w-full max-w-2xl mx-auto">
+            <AdZone position="horizontal" enableGoogleAds={true} />
+          </div>
         </div>
 
         {showForm && (
@@ -988,10 +993,7 @@ export default function HomePage() {
           </div>
         )}
 
-        {/* Advertisement Space - Mobile Optimized */}
-        <div className="mt-8 sm:mt-12 w-full overflow-hidden">
-          <AdZone position="inline" enableGoogleAds={true} />
-        </div>
+
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6 mt-8 sm:mt-12">
           {/* Main Content */}
@@ -1016,29 +1018,20 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Sidebar with Ads - Mobile Optimized */}
+          {/* Sidebar with Admin Ads Only */}
           <div className="lg:col-span-1 order-1 lg:order-2">
             <div className="lg:sticky lg:top-8 space-y-4 sm:space-y-6">
+              {/* Admin Created Ads Space */}
               <div className="w-full max-w-sm mx-auto lg:max-w-none">
-                <AdZone position="sidebar" enableGoogleAds={true} />
-              </div>
-              <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-gray-200">
-                <h4 className="font-semibold text-gray-800 mb-2">Ready to Start?</h4>
-                <p className="text-sm text-gray-600 mb-3">Join the Efuyegela ecosystem today</p>
-                <button
-                  onClick={() => setShowForm(true)}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded text-sm transition-colors"
-                >
-                  Get Started
-                </button>
+                <AdZone position="admin-sidebar" enableGoogleAds={false} />
               </div>
             </div>
           </div>
         </div>
 
-        {/* Footer Advertisement - Mobile Optimized */}
+        {/* Admin Created Ads - Footer */}
         <div className="mt-8 sm:mt-12 w-full overflow-hidden">
-          <AdZone position="footer" enableGoogleAds={true} />
+          <AdZone position="admin-footer" enableGoogleAds={false} />
         </div>
       </div>
     </div>

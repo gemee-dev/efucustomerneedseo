@@ -59,7 +59,9 @@ export function AdZone({ position, enableGoogleAds = true }) {
   useEffect(() => {
     const fetchAdvertisements = async () => {
       try {
-        const response = await fetch(`/api/advertisements?position=${position}&status=active&limit=5`)
+        // Map admin positions to database positions
+        const dbPosition = position.startsWith('admin-') ? position.replace('admin-', '') : position
+        const response = await fetch(`/api/advertisements?position=${dbPosition}&status=active&limit=5`)
         if (response.ok) {
           const data = await response.json()
           setAdvertisements(data.data || [])
@@ -73,8 +75,13 @@ export function AdZone({ position, enableGoogleAds = true }) {
       }
     }
 
-    fetchAdvertisements()
-  }, [position])
+    // Only fetch admin ads for admin positions, skip for Google ad positions
+    if (position.startsWith('admin-') || !enableGoogleAds) {
+      fetchAdvertisements()
+    } else {
+      setLoading(false)
+    }
+  }, [position, enableGoogleAds])
 
   // Rotate ads every 10 seconds for sidebar and other positions with multiple ads
   useEffect(() => {
@@ -91,19 +98,18 @@ export function AdZone({ position, enableGoogleAds = true }) {
     switch (position) {
       case "sidebar":
         return (
-          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-3 border border-blue-100 max-w-full overflow-hidden">
+          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-blue-100 w-full">
             <div className="text-center mb-2">
               <span className="text-xs text-blue-600 uppercase tracking-wide font-medium">Advertisement</span>
             </div>
-            <div className="w-full max-w-sm mx-auto">
+            <div className="w-full">
               <GoogleAdsSlot
                 slot="1234567890"
                 format="auto"
                 style={{
-                  minHeight: '200px',
-                  maxHeight: '300px',
-                  width: '100%',
-                  maxWidth: '320px'
+                  minHeight: '30px',
+                  maxHeight: '50px',
+                  width: '100%'
                 }}
               />
             </div>
@@ -112,17 +118,17 @@ export function AdZone({ position, enableGoogleAds = true }) {
 
       case "inline":
         return (
-          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-3 border border-purple-100 w-full">
+          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-purple-100 w-full">
             <div className="text-center mb-2">
               <span className="text-xs text-purple-600 uppercase tracking-wide font-medium">Advertisement</span>
             </div>
             <div className="w-full">
               <GoogleAdsSlot
                 slot="1234567891"
-                format="fluid"
+                format="auto"
                 style={{
-                  minHeight: '100px',
-                  maxHeight: '200px',
+                  minHeight: '20px',
+                  maxHeight: '40px',
                   width: '100%'
                 }}
               />
@@ -132,7 +138,7 @@ export function AdZone({ position, enableGoogleAds = true }) {
 
       case "footer":
         return (
-          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-3 border border-gray-200 w-full">
+          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-gray-200 w-full">
             <div className="text-center mb-2">
               <span className="text-xs text-gray-600 uppercase tracking-wide font-medium">Advertisement</span>
             </div>
@@ -141,8 +147,28 @@ export function AdZone({ position, enableGoogleAds = true }) {
                 slot="1234567892"
                 format="auto"
                 style={{
-                  minHeight: '80px',
-                  maxHeight: '120px',
+                  minHeight: '17px',
+                  maxHeight: '35px',
+                  width: '100%'
+                }}
+              />
+            </div>
+          </div>
+        )
+
+      case "horizontal":
+        return (
+          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-blue-100 w-full">
+            <div className="text-center mb-2">
+              <span className="text-xs text-blue-600 uppercase tracking-wide font-medium">Advertisement</span>
+            </div>
+            <div className="w-full">
+              <GoogleAdsSlot
+                slot="1234567893"
+                format="auto"
+                style={{
+                  minHeight: '15px',
+                  maxHeight: '30px',
                   width: '100%'
                 }}
               />
@@ -195,25 +221,49 @@ export function AdZone({ position, enableGoogleAds = true }) {
 
     switch (position) {
       case "sidebar":
+      case "admin-sidebar":
         return (
           <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-blue-100">
+            <div className="text-center mb-2">
+              <span className="text-xs text-blue-600 uppercase tracking-wide font-medium">Advertisement</span>
+            </div>
             <h3 className="text-lg font-semibold text-blue-700 mb-2">{currentAdvertisement.title}</h3>
             <p className="text-gray-600 text-sm">{currentAdvertisement.content}</p>
           </div>
         )
 
       case "inline":
+      case "admin-inline":
         return (
           <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-purple-100">
+            <div className="text-center mb-2">
+              <span className="text-xs text-purple-600 uppercase tracking-wide font-medium">Advertisement</span>
+            </div>
             <h3 className="text-lg font-semibold text-purple-700 mb-2">{currentAdvertisement.title}</h3>
             <p className="text-gray-600 text-sm">{currentAdvertisement.content}</p>
           </div>
         )
 
       case "footer":
+      case "admin-footer":
         return (
           <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-gray-200">
+            <div className="text-center mb-2">
+              <span className="text-xs text-gray-600 uppercase tracking-wide font-medium">Advertisement</span>
+            </div>
             <h3 className="text-lg font-semibold text-gray-800 mb-2">{currentAdvertisement.title}</h3>
+            <p className="text-gray-600 text-sm">{currentAdvertisement.content}</p>
+          </div>
+        )
+
+      case "horizontal":
+      case "admin-horizontal":
+        return (
+          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-3 border border-blue-100">
+            <div className="text-center mb-2">
+              <span className="text-xs text-blue-600 uppercase tracking-wide font-medium">Advertisement</span>
+            </div>
+            <h3 className="text-base font-semibold text-blue-700 mb-1">{currentAdvertisement.title}</h3>
             <p className="text-gray-600 text-sm">{currentAdvertisement.content}</p>
           </div>
         )
@@ -223,22 +273,33 @@ export function AdZone({ position, enableGoogleAds = true }) {
     }
   }
 
-  // Render ads - prioritize Google Ads completely
-  const renderMixedAds = () => {
-    const shouldShowGoogle = showGoogleAds
+  // Render ads based on position type
+  const renderAds = () => {
+    // Admin positions show admin-created ads
+    if (position.startsWith('admin-')) {
+      if (advertisements.length > 0) {
+        return getAdContent()
+      } else {
+        return null // Don't show anything if no admin ads
+      }
+    }
 
-    // Always show Google Ads when enabled (no portfolio content)
-    if (shouldShowGoogle) {
+    // Regular positions show Google Ads when enabled
+    if (showGoogleAds && enableGoogleAds) {
       return getGoogleAdContent()
     }
 
-    // Only show custom admin ads if Google Ads are disabled
-    return getAdContent()
+    // Fallback to admin ads if Google Ads disabled
+    if (advertisements.length > 0) {
+      return getAdContent()
+    }
+
+    return null
   }
 
   return (
     <div className="ad-zone" data-position={position}>
-      {renderMixedAds()}
+      {renderAds()}
     </div>
   )
 }

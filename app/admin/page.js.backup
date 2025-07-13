@@ -445,8 +445,44 @@ function AdminDashboard({ admin, onLogout }) {
                                 <span className="truncate">{submission.budget}</span>
                               </>
                             )}
+                            {submission.timeline && (
+                              <>
+                                <span className="mx-2">•</span>
+                                <span className="truncate">{submission.timeline}</span>
+                              </>
+                            )}
                           </div>
                         </div>
+                        {/* Additional form data preview */}
+                        {(() => {
+                          const additionalInfo = []
+                          if (submission.company) additionalInfo.push(`Company: ${submission.company}`)
+                          if (submission.phone) additionalInfo.push(`Phone: ${submission.phone}`)
+                          if (submission.website) additionalInfo.push(`Website: ${submission.website}`)
+
+                          // Add service-specific fields
+                          const serviceFields = [
+                            submission.frontendFramework || submission.frontend_framework,
+                            submission.backendLanguage || submission.backend_language,
+                            submission.mobileStack || submission.mobile_stack,
+                            submission.contentType || submission.content_type,
+                            submission.eventType || submission.event_type,
+                            submission.consultingArea || submission.consulting_area
+                          ].filter(Boolean)
+
+                          if (serviceFields.length > 0) {
+                            additionalInfo.push(`Tech: ${serviceFields.slice(0, 2).join(', ')}`)
+                          }
+
+                          return additionalInfo.length > 0 ? (
+                            <div className="mt-2">
+                              <p className="text-xs text-gray-500">
+                                {additionalInfo.slice(0, 3).join(' • ')}
+                                {additionalInfo.length > 3 && ' • ...'}
+                              </p>
+                            </div>
+                          ) : null
+                        })()}
                         {submission.description && (
                           <div className="mt-2">
                             <p className="text-sm text-gray-600 line-clamp-2">
@@ -648,6 +684,16 @@ function AdminDashboard({ admin, onLogout }) {
                         <p className="mt-1 text-sm text-gray-900">{selectedSubmission.phone}</p>
                       </div>
                     )}
+                    {selectedSubmission.website && (
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">Website</label>
+                        <p className="mt-1 text-sm text-gray-900">
+                          <a href={selectedSubmission.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">
+                            {selectedSubmission.website}
+                          </a>
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -680,36 +726,141 @@ function AdminDashboard({ admin, onLogout }) {
                   </div>
                 </div>
 
-                {/* Service-Specific Information */}
+                {/* Complete Form Data Display */}
                 {(() => {
-                  const dynamicFields = [
-                    { key: 'tech_stack', label: 'Technology Stack' },
-                    { key: 'platform', label: 'Platform' },
-                    { key: 'design_style', label: 'Design Style' },
-                    { key: 'target_audience', label: 'Target Audience' },
-                    { key: 'features', label: 'Key Features' },
-                    { key: 'content_type', label: 'Content Type' },
-                    { key: 'event_type', label: 'Event Type' },
-                    { key: 'consulting_area', label: 'Consulting Area' },
-                    { key: 'project_scope', label: 'Project Scope' }
-                  ]
+                  // All possible form fields organized by category
+                  const allFormFields = {
+                    'Web Development': [
+                      { key: 'frontendFramework', label: 'Frontend Framework' },
+                      { key: 'frontend_framework', label: 'Frontend Framework' },
+                      { key: 'backendLanguage', label: 'Backend Language' },
+                      { key: 'backend_language', label: 'Backend Language' },
+                      { key: 'backendFramework', label: 'Backend Framework' },
+                      { key: 'backend_framework', label: 'Backend Framework' },
+                      { key: 'database', label: 'Database' },
+                      { key: 'webFeatures', label: 'Web Features' },
+                      { key: 'web_features', label: 'Web Features' },
+                      { key: 'hosting', label: 'Hosting Preference' }
+                    ],
+                    'Mobile Development': [
+                      { key: 'mobileStack', label: 'Mobile Stack' },
+                      { key: 'mobile_stack', label: 'Mobile Stack' },
+                      { key: 'targetPlatforms', label: 'Target Platforms' },
+                      { key: 'target_platforms', label: 'Target Platforms' },
+                      { key: 'appType', label: 'App Type' },
+                      { key: 'app_type', label: 'App Type' },
+                      { key: 'mobileFeatures', label: 'Mobile Features' },
+                      { key: 'mobile_features', label: 'Mobile Features' },
+                      { key: 'backendIntegration', label: 'Backend Integration' },
+                      { key: 'backend_integration', label: 'Backend Integration' },
+                      { key: 'appStoreDeployment', label: 'App Store Deployment' },
+                      { key: 'app_store_deployment', label: 'App Store Deployment' }
+                    ],
+                    'Software Development': [
+                      { key: 'softwareType', label: 'Software Type' },
+                      { key: 'software_type', label: 'Software Type' },
+                      { key: 'programmingLanguage', label: 'Programming Language' },
+                      { key: 'programming_language', label: 'Programming Language' },
+                      { key: 'targetPlatform', label: 'Target Platform' },
+                      { key: 'target_platform', label: 'Target Platform' },
+                      { key: 'softwareFeatures', label: 'Software Features' },
+                      { key: 'software_features', label: 'Software Features' },
+                      { key: 'integrationNeeds', label: 'Integration Needs' },
+                      { key: 'integration_needs', label: 'Integration Needs' },
+                      { key: 'performanceRequirements', label: 'Performance Requirements' },
+                      { key: 'performance_requirements', label: 'Performance Requirements' }
+                    ],
+                    'Publishers': [
+                      { key: 'contentType', label: 'Content Type' },
+                      { key: 'content_type', label: 'Content Type' },
+                      { key: 'contentGenre', label: 'Content Genre' },
+                      { key: 'content_genre', label: 'Content Genre' },
+                      { key: 'contentLength', label: 'Content Length' },
+                      { key: 'content_length', label: 'Content Length' },
+                      { key: 'distributionChannels', label: 'Distribution Channels' },
+                      { key: 'distribution_channels', label: 'Distribution Channels' }
+                    ],
+                    'Consultants': [
+                      { key: 'consultingArea', label: 'Consulting Area' },
+                      { key: 'consulting_area', label: 'Consulting Area' },
+                      { key: 'businessStage', label: 'Business Stage' },
+                      { key: 'business_stage', label: 'Business Stage' },
+                      { key: 'teamSize', label: 'Team Size' },
+                      { key: 'team_size', label: 'Team Size' },
+                      { key: 'currentChallenges', label: 'Current Challenges' },
+                      { key: 'current_challenges', label: 'Current Challenges' },
+                      { key: 'projectScope', label: 'Project Scope' },
+                      { key: 'project_scope', label: 'Project Scope' },
+                      { key: 'successMetrics', label: 'Success Metrics' },
+                      { key: 'success_metrics', label: 'Success Metrics' }
+                    ],
+                    'Events': [
+                      { key: 'eventType', label: 'Event Type' },
+                      { key: 'event_type', label: 'Event Type' },
+                      { key: 'eventFormat', label: 'Event Format' },
+                      { key: 'event_format', label: 'Event Format' },
+                      { key: 'attendeeCount', label: 'Attendee Count' },
+                      { key: 'attendee_count', label: 'Attendee Count' },
+                      { key: 'eventDuration', label: 'Event Duration' },
+                      { key: 'event_duration', label: 'Event Duration' },
+                      { key: 'eventGoals', label: 'Event Goals' },
+                      { key: 'event_goals', label: 'Event Goals' },
+                      { key: 'specialRequirements', label: 'Special Requirements' },
+                      { key: 'special_requirements', label: 'Special Requirements' }
+                    ],
+                    'Enterprise Software': [
+                      { key: 'companySize', label: 'Company Size' },
+                      { key: 'company_size', label: 'Company Size' },
+                      { key: 'currentSystems', label: 'Current Systems' },
+                      { key: 'current_systems', label: 'Current Systems' },
+                      { key: 'securityRequirements', label: 'Security Requirements' },
+                      { key: 'security_requirements', label: 'Security Requirements' },
+                      { key: 'scalabilityNeeds', label: 'Scalability Needs' },
+                      { key: 'scalability_needs', label: 'Scalability Needs' }
+                    ],
+                    'Legacy Fields': [
+                      { key: 'techStack', label: 'Technology Stack' },
+                      { key: 'tech_stack', label: 'Technology Stack' },
+                      { key: 'platform', label: 'Platform' },
+                      { key: 'designStyle', label: 'Design Style' },
+                      { key: 'design_style', label: 'Design Style' },
+                      { key: 'targetAudience', label: 'Target Audience' },
+                      { key: 'target_audience', label: 'Target Audience' },
+                      { key: 'features', label: 'Features' }
+                    ],
+                    'Additional Information': [
+                      { key: 'website', label: 'Website' },
+                      { key: 'ip_address', label: 'IP Address' },
+                      { key: 'user_agent', label: 'User Agent' }
+                    ]
+                  }
 
-                  const hasAnyDynamicField = dynamicFields.some(field => selectedSubmission[field.key])
+                  // Find categories that have data
+                  const categoriesWithData = Object.entries(allFormFields).filter(([category, fields]) =>
+                    fields.some(field => selectedSubmission[field.key])
+                  )
 
-                  return hasAnyDynamicField ? (
+                  return categoriesWithData.length > 0 ? (
                     <div>
-                      <h4 className="text-md font-semibold text-gray-900 mb-3">Service-Specific Details</h4>
-                      <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {dynamicFields.map(field =>
-                            selectedSubmission[field.key] ? (
-                              <div key={field.key}>
-                                <label className="block text-sm font-medium text-gray-700">{field.label}</label>
-                                <p className="mt-1 text-sm text-gray-900">{selectedSubmission[field.key]}</p>
+                      <h4 className="text-md font-semibold text-gray-900 mb-3">Complete Form Data</h4>
+                      <div className="space-y-4">
+                        {categoriesWithData.map(([category, fields]) => {
+                          const fieldsWithData = fields.filter(field => selectedSubmission[field.key])
+
+                          return fieldsWithData.length > 0 ? (
+                            <div key={category} className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                              <h5 className="text-sm font-semibold text-blue-800 mb-3">{category}</h5>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {fieldsWithData.map(field => (
+                                  <div key={field.key}>
+                                    <label className="block text-sm font-medium text-gray-700">{field.label}</label>
+                                    <p className="mt-1 text-sm text-gray-900 break-words">{selectedSubmission[field.key]}</p>
+                                  </div>
+                                ))}
                               </div>
-                            ) : null
-                          )}
-                        </div>
+                            </div>
+                          ) : null
+                        })}
                       </div>
                     </div>
                   ) : null
