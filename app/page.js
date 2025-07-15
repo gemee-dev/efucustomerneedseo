@@ -26,8 +26,7 @@ export default function HomePage() {
   })
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
-  const [uploadedFiles, setUploadedFiles] = useState([])
-  const [uploadLoading, setUploadLoading] = useState(false)
+
 
   // Get dynamic questions based on selected service
   const getDynamicQuestions = (service) => {
@@ -590,67 +589,7 @@ export default function HomePage() {
     }
   }
 
-  const handleFileUpload = async (files) => {
-    setUploadLoading(true)
-    const uploadedFileData = []
-    let hasErrors = false
 
-    for (const file of files) {
-      try {
-        // Validate file size on frontend first
-        if (file.size > 5 * 1024 * 1024) {
-          alert(`File "${file.name}" is too large (${Math.round(file.size / 1024 / 1024)}MB). Maximum 5MB allowed.`)
-          hasErrors = true
-          continue
-        }
-
-        const formData = new FormData()
-        formData.append('file', file)
-
-        console.log(`📤 Uploading file: ${file.name} (${Math.round(file.size / 1024)}KB)`)
-
-        const response = await fetch('/api/upload', {
-          method: 'POST',
-          body: formData
-        })
-
-        if (response.ok) {
-          const result = await response.json()
-          console.log('✅ File upload successful:', result)
-          uploadedFileData.push({
-            name: result.originalName || file.name,
-            size: result.size || file.size,
-            type: result.type || file.type,
-            url: result.url,
-            uploadedAt: result.uploadedAt || new Date().toISOString()
-          })
-        } else {
-          const errorResult = await response.json().catch(() => ({ error: 'Unknown error' }))
-          console.error('❌ File upload failed:', errorResult)
-          alert(`Failed to upload "${file.name}": ${errorResult.error || 'Server error'}`)
-          hasErrors = true
-        }
-      } catch (error) {
-        console.error('File upload error:', error)
-        alert(`Error uploading "${file.name}": ${error.message}`)
-        hasErrors = true
-      }
-    }
-
-    if (uploadedFileData.length > 0) {
-      setUploadedFiles(prev => [...prev, ...uploadedFileData])
-    }
-
-    if (!hasErrors && uploadedFileData.length > 0) {
-      alert(`Successfully uploaded ${uploadedFileData.length} file(s)`)
-    }
-
-    setUploadLoading(false)
-  }
-
-  const removeFile = (index) => {
-    setUploadedFiles(prev => prev.filter((_, i) => i !== index))
-  }
 
   const validateDynamicFields = () => {
     const dynamicQuestions = getDynamicQuestions(formData.service)
@@ -678,7 +617,6 @@ export default function HomePage() {
     try {
       const submissionData = {
         ...formData,
-        files: uploadedFiles,
         submittedAt: new Date().toISOString()
       }
 
@@ -712,7 +650,7 @@ export default function HomePage() {
             // Legacy fields (keeping for compatibility)
             techStack: "", platform: "", designStyle: "", targetAudience: "", features: ""
           })
-          setUploadedFiles([])
+
         }, 2000)
       }
     } catch (err) {
@@ -930,71 +868,7 @@ export default function HomePage() {
                     />
                   </div>
 
-                  {/* File Upload Section */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Project Files</label>
-                    <p className="text-xs text-gray-500 mb-2">Upload any relevant documents, images, or files related to your project (Max 5MB each)</p>
 
-                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors">
-                      <input
-                        type="file"
-                        multiple
-                        onChange={(e) => handleFileUpload(Array.from(e.target.files))}
-                        className="hidden"
-                        id="file-upload"
-                        accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.gif,.zip,.rar"
-                      />
-                      <label htmlFor="file-upload" className="cursor-pointer">
-                        <div className="text-gray-600">
-                          <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                          </svg>
-                          <p className="mt-2 text-sm">
-                            <span className="font-medium text-blue-600 hover:text-blue-500">Click to upload files</span> or drag and drop
-                          </p>
-                          <p className="text-xs text-gray-500">PDF, DOC, Images, ZIP up to 5MB each</p>
-                        </div>
-                      </label>
-                    </div>
-
-                    {/* Uploaded Files Display */}
-                    {uploadedFiles.length > 0 && (
-                      <div className="mt-4">
-                        <h4 className="text-sm font-medium text-gray-700 mb-2">Uploaded Files:</h4>
-                        <div className="space-y-2">
-                          {uploadedFiles.map((file, index) => (
-                            <div key={index} className="flex items-center justify-between bg-gray-50 p-2 rounded">
-                              <div className="flex items-center">
-                                <svg className="h-5 w-5 text-gray-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                  <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
-                                </svg>
-                                <span className="text-sm text-gray-700">{file.name}</span>
-                                <span className="text-xs text-gray-500 ml-2">({(file.size / 1024 / 1024).toFixed(2)} MB)</span>
-                              </div>
-                              <button
-                                type="button"
-                                onClick={() => removeFile(index)}
-                                className="text-red-500 hover:text-red-700"
-                              >
-                                <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                                </svg>
-                              </button>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {uploadLoading && (
-                      <div className="mt-2 text-center">
-                        <div className="inline-flex items-center">
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
-                          <span className="text-sm text-gray-600">Uploading files...</span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
 
                   <div className="flex gap-3 pt-4">
                     <button

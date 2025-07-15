@@ -2,6 +2,78 @@
 
 import { useState, useEffect } from "react"
 
+// Dynamic questions function (copied from main form)
+const getDynamicQuestions = (service) => {
+  switch (service) {
+    case "web-development":
+      return [
+        { key: "frontendFramework", label: "Frontend Framework/Library", type: "select", required: true },
+        { key: "backendLanguage", label: "Backend Programming Language", type: "select", required: true },
+        { key: "backendFramework", label: "Backend Framework", type: "select" },
+        { key: "database", label: "Database Technology", type: "select", required: true },
+        { key: "webFeatures", label: "Web Application Features", type: "textarea", required: true },
+        { key: "hosting", label: "Hosting & Deployment", type: "select" }
+      ]
+    case "mobile-development":
+      return [
+        { key: "mobileStack", label: "Mobile Development Technology", type: "select", required: true },
+        { key: "targetPlatforms", label: "Target Mobile Platforms", type: "select", required: true },
+        { key: "appType", label: "Mobile App Type", type: "select", required: true },
+        { key: "mobileFeatures", label: "Mobile-Specific Features", type: "textarea", required: true },
+        { key: "backendIntegration", label: "Backend & API Integration", type: "select" },
+        { key: "appStoreDeployment", label: "App Store Deployment", type: "select" }
+      ]
+    case "software-development":
+      return [
+        { key: "softwareType", label: "Type of Software", type: "select", required: true },
+        { key: "programmingLanguage", label: "Preferred Programming Language", type: "select", required: true },
+        { key: "targetPlatform", label: "Target Platform", type: "select", required: true },
+        { key: "softwareFeatures", label: "Software Features & Requirements", type: "textarea", required: true },
+        { key: "integrationNeeds", label: "Integration Requirements", type: "textarea" },
+        { key: "performanceRequirements", label: "Performance Requirements", type: "select" }
+      ]
+    case "efuyegela-publishers":
+      return [
+        { key: "contentType", label: "Type of Content", type: "select", required: true },
+        { key: "contentGenre", label: "Content Genre/Category", type: "select" },
+        { key: "targetAudience", label: "Target Audience", type: "textarea", required: true },
+        { key: "contentLength", label: "Expected Content Length", type: "select" },
+        { key: "distributionChannels", label: "Distribution Channels", type: "textarea" }
+      ]
+    case "efuyegela-consultants":
+      return [
+        { key: "consultingArea", label: "Primary Consulting Area", type: "select", required: true },
+        { key: "businessStage", label: "Current Business Stage", type: "select" },
+        { key: "teamSize", label: "Team/Organization Size", type: "select" },
+        { key: "currentChallenges", label: "Current Challenges", type: "textarea", required: true },
+        { key: "projectScope", label: "Desired Project Scope", type: "select", required: true },
+        { key: "successMetrics", label: "Success Metrics", type: "textarea" }
+      ]
+    case "efuyegela-events":
+      return [
+        { key: "eventType", label: "Event Type", type: "select", required: true },
+        { key: "eventFormat", label: "Event Format", type: "select" },
+        { key: "attendeeCount", label: "Expected Number of Attendees", type: "select", required: true },
+        { key: "targetAudience", label: "Target Audience", type: "textarea", required: true },
+        { key: "eventDuration", label: "Event Duration", type: "select" },
+        { key: "eventGoals", label: "Event Goals & Objectives", type: "textarea", required: true },
+        { key: "specialRequirements", label: "Special Requirements", type: "textarea" }
+      ]
+    case "enterprise-software":
+      return [
+        { key: "softwareType", label: "Type of Enterprise Software", type: "select", required: true },
+        { key: "companySize", label: "Company Size", type: "select", required: true },
+        { key: "techStack", label: "Technology Preference", type: "select", required: true },
+        { key: "currentSystems", label: "Current Systems in Use", type: "textarea", required: true },
+        { key: "integrationNeeds", label: "Integration Requirements", type: "textarea", required: true },
+        { key: "securityRequirements", label: "Security & Compliance Requirements", type: "textarea" },
+        { key: "scalabilityNeeds", label: "Scalability Requirements", type: "select" }
+      ]
+    default:
+      return []
+  }
+}
+
 // Simplified AdminDashboard component
 function AdminDashboard({ admin, onLogout }) {
   const [activeTab, setActiveTab] = useState("submissions")
@@ -37,17 +109,7 @@ function AdminDashboard({ admin, onLogout }) {
         console.log(`✅ Fetched ${data.data?.length || 0} submissions`)
         setSubmissions(data.data || [])
 
-        // Log file information for debugging
-        data.data?.forEach((submission, index) => {
-          try {
-            const files = submission.files ? JSON.parse(submission.files) : []
-            if (files.length > 0) {
-              console.log(`📎 Submission ${index + 1} (${submission.name}) has ${files.length} files:`, files.map(f => f.name))
-            }
-          } catch (e) {
-            console.log(`⚠️ Could not parse files for submission ${index + 1}`)
-          }
-        })
+
       } else if (response.status === 401) {
         // Token expired or invalid, use fallback data
         setSubmissions([
@@ -454,44 +516,7 @@ function AdminDashboard({ admin, onLogout }) {
                             </p>
                           </div>
                         )}
-                        {/* File count indicator with debugging */}
-                        {(() => {
-                          let fileCount = 0
-                          let debugInfo = ''
-                          try {
-                            if (submission.files) {
-                              const files = JSON.parse(submission.files)
-                              fileCount = files.length
-                              debugInfo = `Parsed ${fileCount} files`
-                              console.log(`📎 Submission ${submission.id || submission._id} files:`, files)
-                            } else {
-                              debugInfo = 'No files field'
-                              console.log(`📎 Submission ${submission.id || submission._id} has no files field`)
-                            }
-                          } catch (e) {
-                            debugInfo = `Parse error: ${e.message}`
-                            console.log(`❌ File parse error for submission ${submission.id || submission._id}:`, e.message, 'Raw files:', submission.files)
-                          }
 
-                          return (
-                            <div className="mt-2">
-                              {fileCount > 0 ? (
-                                <div className="flex items-center">
-                                  <svg className="h-4 w-4 text-blue-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
-                                  </svg>
-                                  <span className="text-xs text-blue-600 font-medium">
-                                    {fileCount} file{fileCount !== 1 ? 's' : ''} attached
-                                  </span>
-                                </div>
-                              ) : (
-                                <div className="text-xs text-gray-400">
-                                  No files ({debugInfo})
-                                </div>
-                              )}
-                            </div>
-                          )
-                        })()}
                       </div>
                       <div className="ml-4 flex-shrink-0">
                         <button
@@ -680,39 +705,70 @@ function AdminDashboard({ admin, onLogout }) {
                   </div>
                 </div>
 
-                {/* Service-Specific Information */}
+                {/* Service-Specific Dynamic Questions */}
                 {(() => {
-                  const dynamicFields = [
-                    { key: 'tech_stack', label: 'Technology Stack' },
-                    { key: 'platform', label: 'Platform' },
-                    { key: 'design_style', label: 'Design Style' },
-                    { key: 'target_audience', label: 'Target Audience' },
-                    { key: 'features', label: 'Key Features' },
-                    { key: 'content_type', label: 'Content Type' },
-                    { key: 'event_type', label: 'Event Type' },
-                    { key: 'consulting_area', label: 'Consulting Area' },
-                    { key: 'project_scope', label: 'Project Scope' }
-                  ]
+                  const dynamicQuestions = getDynamicQuestions(selectedSubmission.service)
+                  const hasAnsweredQuestions = dynamicQuestions.some(question =>
+                    selectedSubmission[question.key] && selectedSubmission[question.key].trim() !== ''
+                  )
 
-                  const hasAnyDynamicField = dynamicFields.some(field => selectedSubmission[field.key])
-
-                  return hasAnyDynamicField ? (
+                  return hasAnsweredQuestions ? (
                     <div>
-                      <h4 className="text-md font-semibold text-gray-900 mb-3">Service-Specific Details</h4>
+                      <h4 className="text-md font-semibold text-gray-900 mb-3">
+                        Service-Specific Questions & Answers
+                        <span className="text-sm font-normal text-gray-500 ml-2">
+                          ({selectedSubmission.service})
+                        </span>
+                      </h4>
                       <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {dynamicFields.map(field =>
-                            selectedSubmission[field.key] ? (
-                              <div key={field.key}>
-                                <label className="block text-sm font-medium text-gray-700">{field.label}</label>
-                                <p className="mt-1 text-sm text-gray-900">{selectedSubmission[field.key]}</p>
+                        <div className="space-y-4">
+                          {dynamicQuestions.map(question => {
+                            const answer = selectedSubmission[question.key]
+                            if (!answer || answer.trim() === '') return null
+
+                            return (
+                              <div key={question.key} className="bg-white p-4 rounded-lg border border-blue-100">
+                                <div className="flex items-start justify-between mb-2">
+                                  <label className="block text-sm font-medium text-gray-700">
+                                    {question.label}
+                                    {question.required && <span className="text-red-500 ml-1">*</span>}
+                                  </label>
+                                  <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                                    {question.type}
+                                  </span>
+                                </div>
+                                <div className="mt-2">
+                                  {question.type === 'textarea' ? (
+                                    <p className="text-sm text-gray-900 whitespace-pre-wrap bg-gray-50 p-3 rounded border">
+                                      {answer}
+                                    </p>
+                                  ) : (
+                                    <p className="text-sm text-gray-900 bg-gray-50 p-2 rounded border">
+                                      {answer}
+                                    </p>
+                                  )}
+                                </div>
                               </div>
-                            ) : null
-                          )}
+                            )
+                          })}
                         </div>
                       </div>
                     </div>
-                  ) : null
+                  ) : (
+                    <div>
+                      <h4 className="text-md font-semibold text-gray-900 mb-3">
+                        Service-Specific Questions
+                        <span className="text-sm font-normal text-gray-500 ml-2">
+                          ({selectedSubmission.service})
+                        </span>
+                      </h4>
+                      <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                        <p className="text-sm text-gray-500">
+                          No service-specific questions were answered for this submission.
+                        </p>
+                      </div>
+                    </div>
+                  )
                 })()}
 
                 {/* Project Description */}
@@ -725,102 +781,37 @@ function AdminDashboard({ admin, onLogout }) {
                   </div>
                 )}
 
-                {/* Project Files with Enhanced Debugging */}
-                {(() => {
-                  let files = []
-                  let debugInfo = ''
-                  let parseError = null
-
-                  try {
-                    if (selectedSubmission.files) {
-                      console.log('📎 Raw files data for modal:', selectedSubmission.files)
-                      files = JSON.parse(selectedSubmission.files)
-                      debugInfo = `Successfully parsed ${files.length} files`
-                      console.log('📎 Parsed files for modal:', files)
-                    } else {
-                      debugInfo = 'No files field in submission'
-                      console.log('📎 No files field in submission:', selectedSubmission)
-                    }
-                  } catch (e) {
-                    parseError = e.message
-                    debugInfo = `Parse error: ${e.message}`
-                    console.log('❌ File parse error in modal:', e.message, 'Raw data:', selectedSubmission.files)
-                  }
-
-                  return (
-                    <div>
-                      <h4 className="text-md font-semibold text-gray-900 mb-3">
-                        Project Files
-                        <span className="text-sm font-normal text-gray-500 ml-2">
-                          ({files.length} files - {debugInfo})
-                        </span>
-                      </h4>
-
-                      {parseError && (
-                        <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
-                          <p className="text-sm text-red-600">
-                            <strong>File Parse Error:</strong> {parseError}
-                          </p>
-                          <p className="text-xs text-red-500 mt-1">
-                            Raw data: {selectedSubmission.files ? selectedSubmission.files.substring(0, 100) + '...' : 'null'}
-                          </p>
-                        </div>
-                      )}
-
-                      {files.length > 0 ? (
-                        <div className="bg-gray-50 rounded-lg p-4">
-                          <div className="space-y-3">
-                            {files.map((file, index) => (
-                            <div key={index} className="flex items-center justify-between bg-white p-3 rounded border">
-                              <div className="flex items-center">
-                                <svg className="h-5 w-5 text-gray-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                                  <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
-                                </svg>
-                                <div>
-                                  <p className="text-sm font-medium text-gray-900">{file.name}</p>
-                                  <p className="text-xs text-gray-500">
-                                    {(file.size / 1024 / 1024).toFixed(2)} MB • Uploaded {new Date(file.uploadedAt).toLocaleDateString()}
-                                  </p>
-                                </div>
-                              </div>
-                              <div className="flex space-x-2">
-                                <a
-                                  href={file.url}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm transition-colors"
-                                >
-                                  View
-                                </a>
-                                <a
-                                  href={file.url}
-                                  download={file.name}
-                                  className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm transition-colors"
-                                >
-                                  Download
-                                </a>
-                                <button
-                                  onClick={() => {
-                                    navigator.clipboard.writeText(window.location.origin + file.url)
-                                    alert('File URL copied to clipboard!')
-                                  }}
-                                  className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm transition-colors"
-                                >
-                                  Copy URL
-                                </button>
-                              </div>
-                            </div>
-                            ))}
+                {/* All Form Data (Debug View) */}
+                <div>
+                  <h4 className="text-md font-semibold text-gray-900 mb-3">Complete Form Data</h4>
+                  <div className="bg-gray-50 rounded-lg p-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {Object.entries(selectedSubmission)
+                        .filter(([key, value]) =>
+                          value &&
+                          value !== '' &&
+                          key !== 'id' &&
+                          key !== '_id' &&
+                          key !== '__v' &&
+                          key !== 'submittedAt' &&
+                          key !== 'status'
+                        )
+                        .map(([key, value]) => (
+                          <div key={key} className="bg-white p-3 rounded border">
+                            <label className="block text-xs font-medium text-gray-500 uppercase tracking-wide">
+                              {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                            </label>
+                            <p className="mt-1 text-sm text-gray-900 break-words">
+                              {typeof value === 'object' ? JSON.stringify(value, null, 2) : String(value)}
+                            </p>
                           </div>
-                        </div>
-                      ) : (
-                        <div className="bg-gray-50 rounded-lg p-4">
-                          <p className="text-sm text-gray-500">No files uploaded</p>
-                        </div>
-                      )}
+                        ))
+                      }
                     </div>
-                  )
-                })()}
+                  </div>
+                </div>
+
+
 
                 {/* Status and Actions */}
                 
